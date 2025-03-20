@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#4285f4">
+    <style>
+        h1, h2, .welcome-banner h2 {
+            font-family: 'Fredoka One', cursive;
+        }
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            animation: float 3s infinite alternate;
+            opacity: 0.7;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0); }
+            100% { transform: translateY(-10px) rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="sparkle" style="top: 10px; left: 10%; font-size: 20px;">✨</div>
+            <div class="sparkle" style="top: 30px; right: 20%; font-size: 24px;">⭐</div>
+            <h1><i class="fas fa-calculator"></i> Multiplication Adventure</h1>
+            <button id="settingsBtn" class="btn-icon"><i class="fas fa-cog"></i></button>
+        </header>
+        <main class="app-main">
+            <!-- Dashboard -->
+            <section id="dashboard" class="app-section active">
+                <div class="welcome-banner">
+                    <div class="sparkle" style="top: -20px; left: 30%; font-size: 28px;">✨</div>
+                    <div class="sparkle" style="top: 10px; right: 25%; font-size: 22px;">🌟</div>
+                    <h2>Welcome, Math Explorer!</h2>
+                    <p class="subtitle">Continue your magical multiplication journey</p>
+                </div>
+                <div id="progress" class="progress-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-layer-group"></i>
+                        <div class="stat-info">
+                            <span class="stat-label">Level</span>
+                            <span id="level" class="stat-value">1</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <div class="stat-info">
+                            <span class="stat-label">Points</span>
+                            <span id="points" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-gift"></i>
+                        <div class="stat-info">
+                            <span class="stat-label">Rewards</span>
+                            <span id="badges" class="stat-value">None</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="level-progress">
+                    <div class="level-progress-label">Progress to next level:</div>
+                    <div class="progress-bar-container">
+                        <div id="levelProgressBar" class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="level-progress-info">
+                        <span id="currentPoints">0</span> / <span id="nextLevelPoints">100</span> points
+                    </div>
+                </div>
+                
+                <div class="level-selector">
+                    <div class="level-label">Choose Multiplication Tables:</div>
+                    <div class="level-buttons">
+                        <button id="level1Btn" class="level-btn active">Level 1</button>
+                        <button id="level2Btn" class="level-btn">Level 2</button>
+                        <button id="level3Btn" class="level-btn">Level 3</button>
+                    </div>
+                    <p class="level-info">Level 1: Basic Tables (1-5)<br>
+                       Level 2: Intermediate Tables (6-9)<br>
+                       Level 3: Advanced Tables (10-12)
+                    </p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="startAssessment" class="btn-primary"><i class="fas fa-clipboard-check"></i> Take Assessment</button>
+                    <button id="playGame" class="btn-secondary"><i class="fas fa-gamepad"></i> Flash Cards</button>
+                    <button id="openGenerator" class="btn-tertiary"><i class="fas fa-magic"></i> Custom Practice</button>
+                    <button id="openRewards" class="btn-reward"><i class="fas fa-gift"></i> Rewards Center</button>
+                </div>
+            </section>
+
+            <!-- Assessment -->
+            <section id="assessment" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-clipboard-check"></i> Multiplication Assessment</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="instruction">Solve the multiplication problem:</p>
+                    <div class="math-problem">
+                        <span id="factor1">5</span> × <span id="factor2">7</span> = ?
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="assessmentInput" placeholder="Type your answer" class="text-input">
+                        <button id="submitAssessment" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
+                    </div>
+                    <p id="assessmentFeedback" class="feedback"></p>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+
+            <!-- Flash Cards Game -->
+            <section id="game" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-gamepad"></i> Multiplication Flash Cards</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="instruction">Quickly solve this multiplication:</p>
+                    <div class="math-problem">
+                        <span id="gameFactor1">3</span> × <span id="gameFactor2">6</span> = ?
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="gameInput" placeholder="Type your answer" class="text-input">
+                        <button id="submitGame" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
+                    </div>
+                    <p id="gameFeedback" class="feedback"></p>
+                    <div class="timer-container">
+                        <div class="timer-label">Time remaining:</div>
+                        <div class="timer-bar-container">
+                            <div id="timerBar" class="timer-bar"></div>
+                        </div>
+                    </div>
+                    <button id="nextProblem" class="btn-primary"><i class="fas fa-forward"></i> Next Problem</button>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+
+            <!-- Custom Practice Generator -->
+            <section id="wordGenerator" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-magic"></i> Custom Practice</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card">
+                    <p class="instruction">Tap the multiplication tables you want to practice:</p>
+                    <div class="custom-tables">
+                        <div class="table-selection">
+                            <button class="table-btn" data-table="1">1×</button>
+                            <button class="table-btn" data-table="2">2×</button>
+                            <button class="table-btn" data-table="3">3×</button>
+                            <button class="table-btn" data-table="4">4×</button>
+                            <button class="table-btn" data-table="5">5×</button>
+                            <button class="table-btn" data-table="6">6×</button>
+                            <button class="table-btn" data-table="7">7×</button>
+                            <button class="table-btn" data-table="8">8×</button>
+                            <button class="table-btn" data-table="9">9×</button>
+                            <button class="table-btn" data-table="10">10×</button>
+                            <button class="table-btn" data-table="11">11×</button>
+                            <button class="table-btn" data-table="12">12×</button>
+                        </div>
+                        <button id="generatePractice" class="btn-submit"><i class="fas fa-play"></i> Start Practice</button>
+                    </div>
+                    <div class="custom-practice-area hidden">
+                        <div class="math-problem">
+                            <span id="customFactor1">4</span> × <span id="customFactor2">8</span> = ?
+                        </div>
+                        <div class="input-group">
+                            <input type="number" id="customInput" placeholder="Type your answer" class="text-input">
+                            <button id="submitCustom" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
+                        </div>
+                        <p id="customFeedback" class="feedback"></p>
+                        <button id="nextCustomProblem" class="btn-primary"><i class="fas fa-forward"></i> Next Problem</button>
+                    </div>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+
+            <!-- Settings -->
+            <section id="settings" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    <div class="points-display">
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
+                    </div>
+                </div>
+                <div class="card settings-card">
+                    <div class="setting-option">
+                        <label class="switch">
+                            <input type="checkbox" id="highContrast">
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="setting-label">Dark Mode</div>
+                    </div>
+                    <div class="setting-option">
+                        <label class="setting-label">Text Size:</label>
+                        <select id="textSize" class="select-dropdown">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    <div class="setting-option">
+                        <label class="setting-label">Timer Duration:</label>
+                        <select id="timerDuration" class="select-dropdown">
+                            <option value="10">10 seconds</option>
+                            <option value="15" selected>15 seconds</option>
+                            <option value="20">20 seconds</option>
+                            <option value="30">30 seconds</option>
+                        </select>
+                    </div>
+                    <button id="saveSettings" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+            
+            <!-- Rewards Center -->
+            <section id="rewardsCenter" class="app-section hidden">
+                <h2><i class="fas fa-gift"></i> Rewards Center</h2>
+                <div class="card">
+                    <div class="current-points">
+                        <h3>Your Points: <span id="rewardPoints">0</span></h3>
+                    </div>
+                    <p class="instruction">Collect points by solving multiplication problems correctly to earn these rewards!</p>
+                    
+                    <div class="rewards-grid" id="rewardsGrid"></div>
+                    
+                    <div class="reward-info">
+                        <p><i class="fas fa-info-circle"></i> When you have enough points, click on a reward to claim it. 
+                        Show the confirmation screen to your parent to receive your reward!</p>
+                    </div>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+
+            <!-- Multiplication Table Reference -->
+            <section id="tableReference" class="app-section hidden">
+                <div class="section-header">
+                    <h2><i class="fas fa-table"></i> Multiplication Tables</h2>
+                </div>
+                <div class="card">
+                    <div class="table-selector">
+                        <button class="table-ref-btn active" data-table="1">1×</button>
+                        <button class="table-ref-btn" data-table="2">2×</button>
+                        <button class="table-ref-btn" data-table="3">3×</button>
+                        <button class="table-ref-btn" data-table="4">4×</button>
+                        <button class="table-ref-btn" data-table="5">5×</button>
+                        <button class="table-ref-btn" data-table="6">6×</button>
+                        <button class="table-ref-btn" data-table="7">7×</button>
+                        <button class="table-ref-btn" data-table="8">8×</button>
+                        <button class="table-ref-btn" data-table="9">9×</button>
+                        <button class="table-ref-btn" data-table="10">10×</button>
+                        <button class="table-ref-btn" data-table="11">11×</button>
+                        <button class="table-ref-btn" data-table="12">12×</button>
+                    </div>
+                    <div class="multiplication-table" id="multiplicationTable">
+                        <!-- Table content will be generated by JavaScript -->
+                    </div>
+                </div>
+                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>
+        </main>
+        <footer class="app-footer">
+            <p>© 2025 Multiplication Adventure by Math Explorers | <span class="ai-badge"><i class="fas fa-brain"></i> AI Powered</span></p>
+        </footer>
+    </div>
+    
+    <!-- Scripts -->
+    <script>
+        console.log('HTML loaded, initializing scripts');
+        
+        document.addEventListener('click', function(e) {
+            console.log('Click detected on:', e.target);
+        }, false);
+
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+    <!-- Load services and utilities first -->
+    <script src="js/multiplicationTables.js"></script>
+    <script src="js/mathUtils.js"></script>
+
+    <!-- Load application modules in correct order -->
+    <script src="js/core.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/rewards.js"></script>
+    <script src="js/assessment.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/practice.js"></script>
+    <script src="js/tableReference.js"></script>
+</body>
+</html>
