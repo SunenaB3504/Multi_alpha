@@ -121,6 +121,46 @@ const MathUtils = (function() {
         return problems;
     }
     
+    /**
+     * Generate a set of assessment problems for the given level
+     * @param {number} level - Level of difficulty (1-3)
+     * @param {number} count - Number of problems to generate
+     * @returns {Array} - Array of problem objects
+     */
+    function generateAssessmentProblems(level, count) {
+        console.log(`Generating ${count} assessment problems for level ${level}`);
+        
+        // Get the appropriate tables for the level
+        let tables = [];
+        if (MultiplicationTables && MultiplicationTables.getTablesForLevel) {
+            tables = MultiplicationTables.getTablesForLevel(level);
+        } else {
+            // Fallback if MultiplicationTables is not available
+            tables = level === 1 ? [1, 2, 3, 4, 5] : 
+                    level === 2 ? [6, 7, 8, 9] : 
+                    [10, 11, 12];
+        }
+        
+        // Generate the specified number of problems
+        const problems = [];
+        for (let i = 0; i < count; i++) {
+            // Select a random table from the level
+            const table = tables[Math.floor(Math.random() * tables.length)];
+            
+            // Select a random number to multiply by (1-12)
+            const factor2 = Math.floor(Math.random() * 12) + 1;
+            
+            // Add the problem to the array
+            problems.push({
+                factor1: table,
+                factor2: factor2,
+                answer: table * factor2
+            });
+        }
+        
+        return problems;
+    }
+    
     // Public API
     return {
         startTimer,
@@ -130,3 +170,8 @@ const MathUtils = (function() {
         generateAssessmentProblems
     };
 })();
+
+// Make it globally available
+window.MathUtils = MathUtils;
+
+console.log('Math Utils module loaded');

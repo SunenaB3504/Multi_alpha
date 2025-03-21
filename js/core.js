@@ -25,16 +25,48 @@ const AppCore = (function() {
     function init() {
         console.log('Initializing Multiplication Adventure app');
         
-        // Load saved data
+        // Ensure MultiplicationTables module is available and has all needed functions
+        if (!window.MultiplicationTables) {
+            console.error('MultiplicationTables module not loaded!');
+            window.MultiplicationTables = {
+                setCurrentLevel: function(level) {
+                    console.log('Fallback level setter used:', level);
+                    return [1, 2, 3, 4, 5];
+                },
+                getProblemFromTables: function(tables) {
+                    console.log('Fallback problem generator used');
+                    const factor1 = Math.floor(Math.random() * 10) + 1;
+                    const factor2 = Math.floor(Math.random() * 10) + 1;
+                    return {
+                        factor1: factor1,
+                        factor2: factor2,
+                        answer: factor1 * factor2
+                    };
+                }
+            };
+        }
+        
+        // Make sure setCurrentLevel exists
+        if (!window.MultiplicationTables.setCurrentLevel) {
+            console.warn('Adding missing setCurrentLevel function to MultiplicationTables');
+            window.MultiplicationTables.setCurrentLevel = function(level) {
+                console.log('Fallback level setter used:', level);
+                return level === 1 ? [1, 2, 3, 4, 5] : 
+                       level === 2 ? [6, 7, 8, 9] : 
+                       [10, 11, 12];
+            };
+        }
+        
+        // Load saved data first
         loadUserData();
+        
+        // Now it's safe to call setCurrentLevel with the loaded user level
+        MultiplicationTables.setCurrentLevel(state.userLevel || 1);
         
         // Initialize UI with current state
         UI.updatePoints(state.points);
         UI.updateLevel(state.userLevel);
         UI.updateLevelProgress(state.currentLevelPoints, state.nextLevelThreshold);
-        
-        // Set correct multiplication table level
-        MultiplicationTables.setCurrentLevel(state.userLevel);
         
         // Register event handlers
         registerEventHandlers();
@@ -82,6 +114,7 @@ const AppCore = (function() {
      * Start assessment mode
      */
     function startAssessment() {
+        // Get the current level
         const currentLevel = MultiplicationTables.getCurrentLevel();
         
         // Generate assessment problems
@@ -91,8 +124,18 @@ const AppCore = (function() {
         // Show assessment section
         UI.showSection('assessment');
         
-        // Start first problem
-        Assessment.startProblem(state.assessmentProblems[0]);
+        // Start the assessment with all problems
+        if (window.Assessment && Assessment.startAssessment) {
+            Assessment.startAssessment(state.assessmentProblems);
+        } else {
+            console.error('Assessment module not loaded or missing startAssessment function');
+            // Fallback to just showing the first problem
+            if (state.assessmentProblems.length > 0) {
+                const problem = state.assessmentProblems[0];
+                document.getElementById('factor1').textContent = problem.factor1;
+                document.getElementById('factor2').textContent = problem.factor2;
+            }
+        }
         
         console.log('Starting assessment with level:', currentLevel);
     }
@@ -141,11 +184,30 @@ const AppCore = (function() {
      * @param {Number} points - Points to add
      */
     function addPoints(points) {
+        console.log('Core: Adding points:', points);
+        
+        // Make sure points is a valid number
+        if (typeof points !== 'number' || isNaN(points)) {
+            console.error('Invalid points value:', points);
+            points = 0;
+        }
+        
+        // Convert to integer and ensure it's positive
+        points = Math.abs(Math.floor(points));
+        
+        // Update state
         state.points += points;
         state.currentLevelPoints += points;
         
-        // Update UI
-        UI.updatePoints(state.points);
+        console.log('New points total:', state.points);
+        console.log('Current level points:', state.currentLevelPoints);
+        
+        // Update UI immediately
+        try {
+            UI.updatePoints(state.points);
+        } catch (err) {
+            console.error('Error updating points display:', err);
+        }
         
         // Check for level up
         checkLevelUp();
@@ -153,7 +215,8 @@ const AppCore = (function() {
         // Save user data
         saveUserData();
         
-        console.log('Added', points, 'points. New total:', state.points);
+        // Expose points in global debugging
+        window.debugTotalPoints = state.points;
         
         return state.points;
     }
@@ -172,6 +235,13 @@ const AppCore = (function() {
             UI.updateLevel(state.userLevel);
             UI.showLevelUpMessage(state.userLevel);
             
+            // Show dancing dog for level up too!
+            if (window.UI && UI.showCelebrationAnimation) {
+                setTimeout(() => {
+                    UI.showCelebrationAnimation();
+                }, 1000); // Slight delay after level up message
+            }
+            
             console.log('Level up! New level:', state.userLevel);
         }
         
@@ -184,19 +254,15 @@ const AppCore = (function() {
      */
     function saveUserData() {
         const userData = {
-            userLevel: state.userLevel,
-            points: state.points,
-            currentLevelPoints: state.currentLevelPoints,
-            nextLevelThreshold: state.nextLevelThreshold,
-            rewards: state.rewards
+            userLevel: state.userLevel,           // Current level (1-3)
+            points: state.points,                 // Total points earned
+            currentLevelPoints: state.currentLevelPoints,   // Points in current level
+            nextLevelThreshold: state.nextLevelThreshold,   // Points needed for next level
+            rewards: state.rewards                // Rewards earned
         };
         
-        try {
-            localStorage.setItem('multiplicationAdventure', JSON.stringify(userData));
-            console.log('User data saved');
-        } catch (error) {
-            console.error('Error saving user data:', error);
-        }
+        // This saves the data to browser's localStorage
+        localStorage.setItem('multiplicationAdventure', JSON.stringify(userData));
     }
     
     /**
@@ -240,7 +306,13 @@ const AppCore = (function() {
     };
 })();
 
+// Make sure AppCore is properly exposed globally
+window.AppCore = AppCore;
+
 // Initialize app when document is ready
 document.addEventListener('DOMContentLoaded', function() {
     AppCore.init();
+    
+    // Debug output for initial state
+    console.log('Initial app state:', AppCore.getState());
 });

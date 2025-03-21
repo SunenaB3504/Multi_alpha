@@ -1,98 +1,90 @@
 /**
- * Multiplication Tables Data and Utilities
+ * Multiplication Tables module for the app
  */
 
 const MultiplicationTables = (function() {
-    // Store tables by level
-    const tablesByLevel = {
-        1: [1, 2, 3, 4, 5],        // Basic tables 1-5
-        2: [6, 7, 8, 9],           // Intermediate tables 6-9
-        3: [10, 11, 12]            // Advanced tables 10-12
+    // Current level (1: tables 1-5, 2: tables 6-9, 3: tables 10-12)
+    let currentLevel = 1;
+    
+    // Tables for each level
+    const levelTables = {
+        1: [1, 2, 3, 4, 5],
+        2: [6, 7, 8, 9],
+        3: [10, 11, 12]
     };
     
-    // Maximum number for multiplication (1-12)
-    const MAX_MULTIPLIER = 12;
+    /**
+     * Set the current level for multiplication tables
+     * @param {number} level - The level to set (1-3)
+     */
+    function setCurrentLevel(level) {
+        console.log('Setting multiplication tables level to:', level);
+        
+        // Validate level
+        if (level < 1 || level > 3) {
+            console.error('Invalid level provided, defaulting to level 1');
+            level = 1;
+        }
+        
+        currentLevel = level;
+        return levelTables[level];
+    }
     
-    // Store current level
-    let currentLevel = 1;
+    /**
+     * Get the current level tables
+     * @returns {Array} - Array of tables for the current level
+     */
+    function getCurrentLevelTables() {
+        return levelTables[currentLevel];
+    }
+    
+    /**
+     * Generate a problem from specified tables
+     * @param {Array} tables - Array of multiplication tables to use
+     * @returns {Object} - Problem object with factor1, factor2, and answer
+     */
+    function getProblemFromTables(tables) {
+        console.log('Generating problem from tables:', tables);
+        
+        if (!tables || !tables.length) {
+            console.error('No tables provided! Using current level tables.');
+            tables = getCurrentLevelTables();
+        }
+        
+        // Select a random table from the provided tables
+        const tableIndex = Math.floor(Math.random() * tables.length);
+        const table = tables[tableIndex];
+        
+        // Generate a random second factor (1-12)
+        const factor2 = Math.floor(Math.random() * 12) + 1;
+        
+        // Calculate the answer
+        const answer = table * factor2;
+        
+        // Return problem object
+        return {
+            factor1: table,
+            factor2: factor2,
+            answer: answer
+        };
+    }
     
     /**
      * Get tables for a specific level
-     * @param {Number} level - The level (1, 2, or 3)
-     * @return {Array} - Array of table numbers for that level
+     * @param {number} level - The level (1-3)
+     * @returns {Array} - Array of tables for the specified level
      */
     function getTablesForLevel(level) {
-        return tablesByLevel[level] || tablesByLevel[1];
-    }
-    
-    /**
-     * Get random multiplication problem for the current level
-     * @return {Object} - Object containing factor1, factor2, and answer
-     */
-    function getRandomProblem() {
-        const tables = getTablesForLevel(currentLevel);
-        const factor1 = tables[Math.floor(Math.random() * tables.length)];
-        const factor2 = Math.floor(Math.random() * MAX_MULTIPLIER) + 1;
-        
-        return {
-            factor1,
-            factor2,
-            answer: factor1 * factor2
-        };
-    }
-    
-    /**
-     * Get random problem from specific tables
-     * @param {Array} tables - Array of table numbers to use
-     * @return {Object} - Object containing factor1, factor2, and answer
-     */
-    function getProblemFromTables(tables) {
-        if (!tables || tables.length === 0) {
-            return getRandomProblem();
+        if (level < 1 || level > 3) {
+            console.error('Invalid level, defaulting to level 1');
+            level = 1;
         }
-        
-        const factor1 = tables[Math.floor(Math.random() * tables.length)];
-        const factor2 = Math.floor(Math.random() * MAX_MULTIPLIER) + 1;
-        
-        return {
-            factor1,
-            factor2,
-            answer: factor1 * factor2
-        };
-    }
-    
-    /**
-     * Get complete multiplication table for a specific number
-     * @param {Number} tableNumber - The multiplication table to generate (e.g., 5 for 5x table)
-     * @return {Array} - Array of objects with each calculation in the table
-     */
-    function getFullTable(tableNumber) {
-        const table = [];
-        
-        for (let i = 1; i <= MAX_MULTIPLIER; i++) {
-            table.push({
-                factor1: tableNumber,
-                factor2: i,
-                answer: tableNumber * i
-            });
-        }
-        
-        return table;
-    }
-    
-    /**
-     * Set the current level
-     * @param {Number} level - The level to set (1, 2, or 3)
-     */
-    function setCurrentLevel(level) {
-        if (level >= 1 && level <= 3) {
-            currentLevel = level;
-        }
+        return levelTables[level];
     }
     
     /**
      * Get the current level
-     * @return {Number} - The current level
+     * @returns {number} - The current level (1-3)
      */
     function getCurrentLevel() {
         return currentLevel;
@@ -100,11 +92,15 @@ const MultiplicationTables = (function() {
     
     // Public API
     return {
-        getTablesForLevel,
-        getRandomProblem,
         getProblemFromTables,
-        getFullTable,
         setCurrentLevel,
-        getCurrentLevel
+        getCurrentLevelTables,
+        getTablesForLevel,
+        getCurrentLevel  // Add this to expose the getCurrentLevel function
     };
 })();
+
+// Make it globally available
+window.MultiplicationTables = MultiplicationTables;
+
+console.log('Multiplication Tables module loaded');

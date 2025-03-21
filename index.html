@@ -185,6 +185,19 @@
                             <button id="submitCustom" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
                         </div>
                         <p id="customFeedback" class="feedback"></p>
+                        <div id="correctGifContainer" class="correct-gif-container hidden">
+                            <img id="correctGif" 
+                                 src="images/dancing_dog.gif" 
+                                 alt="Dancing dog celebration" 
+                                 onload="console.log('Local dancing dog animation loaded successfully')"
+                                 onerror="this.onerror=null; this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjdsOWsweXE5ZngzaGFiMm5mMWprdG4zangyOW8wZDc0Y2pxODNuZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9tx0gy61kmcdG/giphy.gif'; console.log('Fallback to online GIF');">
+                            <p style="margin: 10px 0; color: #8B4513; font-weight: bold;">Great job! 🎉</p>
+                            <div class="celebration-fallback">
+                                <i class="fas fa-dog celebration-star"></i>
+                                <i class="fas fa-bone celebration-star"></i>
+                                <i class="fas fa-dog celebration-star"></i>
+                            </div>
+                        </div>
                         <button id="nextCustomProblem" class="btn-primary"><i class="fas fa-forward"></i> Next Problem</button>
                     </div>
                 </div>

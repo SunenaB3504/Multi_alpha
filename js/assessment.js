@@ -1,95 +1,112 @@
 /**
- * Assessment functionality for Multiplication Adventure
+ * Assessment module for the app
  */
 
 const Assessment = (function() {
     // Track assessment state
     let currentProblem = null;
-    let problemCount = 0;
-    let correctCount = 0;
-    let totalPoints = 0;
+    let problemIndex = 0;
+    let totalProblems = 0;
+    let correctAnswers = 0;
     
     /**
-     * Initialize assessment module
-     */
-    function init() {
-        // Set up event listeners
-        const submitBtn = document.getElementById('submitAssessment');
-        const input = document.getElementById('assessmentInput');
-        
-        submitBtn.addEventListener('click', checkAnswer);
-        
-        // Allow submitting with Enter key
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-    }
-    
-    /**
-     * Start assessment with first problem
-     */
-    function startAssessment() {
-        // Reset assessment state
-        problemCount = 0;
-        correctCount = 0;
-        totalPoints = 0;
-        
-        // Get a new problem
-        nextProblem();
-    }
-    
-    /**
-     * Start a specific problem
-     * @param {Object} problem - Problem object with factor1, factor2, answer
+     * Start a new problem in the assessment
+     * @param {Object} problem - The problem to display
      */
     function startProblem(problem) {
-        // Store current problem
+        console.log('Starting assessment problem:', problem);
+        
+        if (!problem) {
+            console.error('No problem provided!');
+            return;
+        }
+        
+        // Store the current problem
         currentProblem = problem;
         
-        // Display problem
+        // Display the problem
         document.getElementById('factor1').textContent = problem.factor1;
         document.getElementById('factor2').textContent = problem.factor2;
         
         // Clear input and feedback
         const input = document.getElementById('assessmentInput');
-        input.value = '';
-        input.focus();
+        if (input) {
+            input.value = '';
+            input.disabled = false;
+            input.focus();
+        }
         
-        document.getElementById('assessmentFeedback').textContent = '';
-        document.getElementById('assessmentFeedback').className = 'feedback';
+        const feedback = document.getElementById('assessmentFeedback');
+        if (feedback) {
+            feedback.textContent = '';
+            feedback.className = 'feedback';
+        }
+        
+        // Show progress
+        const progressDiv = document.createElement('div');
+        progressDiv.className = 'assessment-progress';
+        progressDiv.textContent = `Problem ${problemIndex + 1} of ${totalProblems}`;
+        
+        const existingProgress = document.querySelector('.assessment-progress');
+        if (existingProgress) {
+            existingProgress.replaceWith(progressDiv);
+        } else {
+            const container = document.querySelector('#assessment .card');
+            if (container) {
+                container.prepend(progressDiv);
+            }
+        }
     }
     
     /**
-     * Move to next problem
+     * Start a new assessment
+     * @param {Array} problems - Array of problems for the assessment
      */
-    function nextProblem() {
-        // Increase problem count
-        problemCount++;
+    function startAssessment(problems) {
+        console.log('Starting new assessment with problems:', problems);
         
-        // Check if assessment is complete
-        if (problemCount > 10) {
-            completeAssessment();
+        if (!problems || !problems.length) {
+            console.error('No problems provided for assessment!');
             return;
         }
         
-        // Get a new problem based on level
-        const level = MultiplicationTables.getCurrentLevel();
-        const problem = MultiplicationTables.getRandomProblem();
+        // Reset assessment state
+        problemIndex = 0;
+        totalProblems = problems.length;
+        correctAnswers = 0;
         
-        // Start problem
-        startProblem(problem);
+        // Start first problem
+        startProblem(problems[0]);
+        
+        // Set up the submit button handler
+        const submitBtn = document.getElementById('submitAssessment');
+        if (submitBtn) {
+            submitBtn.onclick = function() {
+                checkAnswer(problems);
+            };
+        }
+        
+        // Set up enter key handler
+        const input = document.getElementById('assessmentInput');
+        if (input) {
+            input.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswer(problems);
+                }
+            };
+        }
     }
     
     /**
-     * Check user's answer
+     * Check the user's answer
      */
-    function checkAnswer() {
+    function checkAnswer(problems) {
         if (!currentProblem) return;
         
         // Get user's answer
         const input = document.getElementById('assessmentInput');
+        if (!input) return;
+        
         const userAnswer = parseInt(input.value.trim());
         
         // Validate input
@@ -104,18 +121,25 @@ const Assessment = (function() {
         // Calculate points
         let pointsEarned = 0;
         if (isCorrect) {
-            // Base points per level
-            const level = MultiplicationTables.getCurrentLevel();
-            pointsEarned = 10 * level;
+            // Award points - more for assessment than practice
+            pointsEarned = 10;
+            correctAnswers++;
             
-            // Update correct count
-            correctCount++;
+            // Add points to user's account - with improved error handling
+            try {
+                console.log('Assessment: Awarding points:', pointsEarned);
+                if (window.AppCore && typeof window.AppCore.addPoints === 'function') {
+                    const newTotal = window.AppCore.addPoints(pointsEarned);
+                    console.log('Assessment: New total points:', newTotal);
+                } else {
+                    console.error('AppCore.addPoints is not available');
+                }
+            } catch (err) {
+                console.error('Error adding points:', err);
+            }
             
-            // Update total points
-            totalPoints += pointsEarned;
-            
-            // Add points to user's account
-            AppCore.addPoints(pointsEarned);
+            // Show dancing dog celebration - using direct method for reliability
+            showDancingDogInAssessment();
         }
         
         // Show feedback
@@ -125,91 +149,162 @@ const Assessment = (function() {
                 `Correct! ${currentProblem.factor1} × ${currentProblem.factor2} = ${currentProblem.answer}. +${pointsEarned} points!`, 
                 true
             );
-            
-            // Add short delay before next problem
-            setTimeout(nextProblem, 1500);
         } else {
             UI.showFeedback(
                 'assessmentFeedback', 
-                `Incorrect. The answer is ${currentProblem.answer}. Try the next one!`, 
+                `Incorrect. The answer is ${currentProblem.answer}.`, 
                 false
             );
+        }
+        
+        // Move to next problem or finish assessment
+        problemIndex++;
+        
+        // Disable input temporarily
+        input.disabled = true;
+        
+        setTimeout(function() {
+            if (problemIndex < totalProblems) {
+                // Move to next problem
+                startProblem(problems[problemIndex]);
+            } else {
+                // Assessment complete
+                completeAssessment();
+            }
+        }, 2000);
+    }
+    
+    /**
+     * Direct method to show dancing dog in Assessment
+     * This ensures the animation works reliably in this section
+     */
+    function showDancingDogInAssessment() {
+        console.log('Directly showing dancing dog in Assessment');
+        
+        try {
+            // Get Assessment section card
+            const assessmentCard = document.querySelector('#assessment .card');
+            if (!assessmentCard) {
+                console.error('Assessment card element not found');
+                return;
+            }
             
-            // Add short delay before next problem
-            setTimeout(nextProblem, 2000);
+            // Create animation container
+            const dogContainer = document.createElement('div');
+            dogContainer.className = 'assessment-celebration-container';
+            dogContainer.style.cssText = `
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                background-color: rgba(245, 245, 220, 0.9) !important;
+                border: 5px solid #8B4513 !important;
+                border-radius: 12px !important;
+                padding: 15px !important;
+                margin: 15px auto !important;
+                max-width: 280px !important;
+                text-align: center !important;
+                z-index: 9999 !important;
+                position: relative !important;
+            `;
+            
+            // Create dog animation content
+            dogContainer.innerHTML = `
+                <img src="images/dancing_dog.gif" 
+                     alt="Dancing dog celebration" 
+                     style="display: block !important; max-width: 220px !important; max-height: 220px !important; margin: 0 auto !important; border-radius: 8px !important;"
+                     onerror="this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjdsOWsweXE5ZngzaGFiMm5mMWprdG4zangyOW8wZDc0Y2pxODNuZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9tx0gy61kmcdG/giphy.gif';" />
+                <p style="margin: 10px 0; color: #8B4513; font-weight: bold;">Great job! 🎉</p>
+                <div style="display: flex; justify-content: center; margin-top: 10px;">
+                    <i class="fas fa-dog" style="color: #8B4513; font-size: 30px; margin: 0 10px; animation: bounce 1s infinite alternate;"></i>
+                    <i class="fas fa-bone" style="color: #D2B48C; font-size: 25px; margin: 0 10px; animation: rotate 1.5s infinite linear;"></i>
+                    <i class="fas fa-dog" style="color: #8B4513; font-size: 30px; margin: 0 10px; animation: bounce 1s infinite alternate;"></i>
+                </div>
+            `;
+            
+            // Remove any existing animation
+            const existingAnimation = document.querySelector('.assessment-celebration-container');
+            if (existingAnimation) {
+                existingAnimation.remove();
+            }
+            
+            // Find the right place to insert it (after feedback)
+            const feedback = document.getElementById('assessmentFeedback');
+            if (feedback) {
+                feedback.parentNode.insertBefore(dogContainer, feedback.nextSibling);
+            } else {
+                // If no feedback element, just add to the card
+                assessmentCard.appendChild(dogContainer);
+            }
+            
+            // Remove after a timeout
+            setTimeout(() => {
+                if (dogContainer && dogContainer.parentNode) {
+                    dogContainer.style.transition = 'opacity 1s ease';
+                    dogContainer.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        if (dogContainer && dogContainer.parentNode) {
+                            dogContainer.remove();
+                        }
+                    }, 1000);
+                }
+            }, 5000);
+            
+            // Also try the regular UI method as a backup
+            if (window.UI && UI.showCelebrationAnimation) {
+                try {
+                    setTimeout(() => UI.showCelebrationAnimation(), 100);
+                } catch (e) {
+                    console.log('Backup animation method failed, but direct method should work');
+                }
+            }
+            
+        } catch (error) {
+            console.error('Error showing assessment celebration:', error);
         }
     }
     
     /**
-     * Complete the assessment
+     * Complete the assessment and show results
      */
     function completeAssessment() {
-        // Create results card
-        const assessmentSection = document.getElementById('assessment');
-        const resultsCard = document.createElement('div');
-        resultsCard.className = 'card assessment-results';
+        console.log('Assessment complete. Correct answers:', correctAnswers, 'out of', totalProblems);
         
-        // Calculate percentage
-        const percentage = Math.round((correctCount / 10) * 100);
+        // Calculate score as percentage
+        const score = Math.round((correctAnswers / totalProblems) * 100);
         
-        // Determine performance message
-        let performanceMessage = '';
-        if (percentage >= 90) {
-            performanceMessage = 'Amazing work! You\'re a multiplication master!';
-        } else if (percentage >= 70) {
-            performanceMessage = 'Great job! You\'re getting really good at this!';
-        } else if (percentage >= 50) {
-            performanceMessage = 'Good effort! Keep practicing to improve!';
-        } else {
-            performanceMessage = 'Keep practicing - you\'ll get better with time!';
-        }
-        
-        // Set results content
-        resultsCard.innerHTML = `
+        // Create results display
+        const resultsDiv = document.createElement('div');
+        resultsDiv.className = 'assessment-results';
+        resultsDiv.innerHTML = `
             <h3>Assessment Complete!</h3>
-            <div class="results-stats">
-                <div class="result-item">
-                    <div class="result-label">Score</div>
-                    <div class="result-value">${correctCount}/10</div>
-                </div>
-                <div class="result-item">
-                    <div class="result-label">Percentage</div>
-                    <div class="result-value">${percentage}%</div>
-                </div>
-                <div class="result-item">
-                    <div class="result-label">Points Earned</div>
-                    <div class="result-value">+${totalPoints}</div>
-                </div>
-            </div>
-            <p class="performance-message">${performanceMessage}</p>
-            <button id="returnToDashboard" class="btn-primary">Return to Dashboard</button>
+            <p>You got ${correctAnswers} out of ${totalProblems} correct (${score}%).</p>
+            <button class="btn-primary" id="returnToDashboard">
+                <i class="fas fa-home"></i> Return to Dashboard
+            </button>
         `;
         
-        // Replace assessment content
-        const card = assessmentSection.querySelector('.card');
-        card.parentNode.replaceChild(resultsCard, card);
-        
-        // Add event listener for return button
-        resultsCard.querySelector('#returnToDashboard').addEventListener('click', () => {
-            // Return to dashboard
-            UI.showSection('dashboard');
+        // Replace content with results
+        const container = document.querySelector('#assessment .card');
+        if (container) {
+            container.innerHTML = '';
+            container.appendChild(resultsDiv);
             
-            // Restore original assessment card
-            setTimeout(() => {
-                resultsCard.parentNode.replaceChild(card, resultsCard);
-            }, 500);
-        });
+            // Add event listener to return button
+            document.getElementById('returnToDashboard').addEventListener('click', function() {
+                UI.showSection('dashboard');
+            });
+        }
     }
     
     // Public API
     return {
-        init,
-        startAssessment,
-        startProblem
+        startProblem,
+        startAssessment
     };
 })();
 
-// Initialize assessment module when document is ready
-document.addEventListener('DOMContentLoaded', function() {
-    Assessment.init();
-});
+// Make it globally available
+window.Assessment = Assessment;
+
+console.log('Assessment module loaded');

@@ -120,6 +120,7 @@ body {
     box-shadow: var(--shadow);
     flex: 1;
     margin: 0 5px;
+    min-height: 70px;
 }
 
 .stat-card i {
@@ -625,9 +626,12 @@ input:checked + .slider:before {
 
 .custom-practice-area {
     margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #eaeaea;
+    border-radius: var(--border-radius);
 }
 
-.custom-practice-area.hidden {
+.custom-practice-area.hidden:not([style*="display: block"]) {
     display: none;
 }
 
@@ -732,4 +736,642 @@ input:checked + .slider:before {
     .table-selection {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+/* Add these styles to your existing CSS file */
+
+.celebration-fallback {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.correct-gif-container.hidden {
+    display: none;
+}
+
+.celebration-star {
+    color: gold;
+    font-size: 30px;
+    margin: 0 10px;
+    animation: twinkle 1.5s infinite alternate;
+}
+
+.celebration-star:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.celebration-star:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes twinkle {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1.3); opacity: 1; }
+}
+
+.fallback-gif {
+    max-width: 200px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Enhanced animation styling */
+.correct-gif-container {
+    text-align: center;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.correct-gif-container.hidden {
+    display: none;
+    max-height: 0;
+    padding: 0;
+}
+
+.correct-gif-container.testing {
+    border: 3px solid gold;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+#correctGif {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 8px;
+}
+
+/* Completely revised animation styling to fix visibility issues */
+.correct-gif-container {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    max-height: 250px;
+    z-index: 100;
+    position: relative;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.correct-gif-container.hidden {
+    display: none !important;
+}
+
+#correctGif {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+.celebration-fallback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    min-height: 60px;
+}
+
+.celebration-star {
+    color: gold;
+    font-size: 36px;
+    margin: 0 10px;
+    display: inline-block;
+    animation: twinkle 1.5s infinite alternate;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
+}
+
+@keyframes twinkle {
+    0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+    50% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+    100% { transform: scale(1) rotate(-10deg); opacity: 0.9; }
+}
+
+/* Animation test button styling */
+.animation-test-btn {
+    margin-top: 15px;
+    background-color: #e91e63 !important;
+}
+
+/* Add these rules to ensure the animation container is visible */
+
+/* Ensure animation container stands out */
+.correct-gif-container {
+    display: block !important;
+    text-align: center;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    max-width: 300px;
+    z-index: 1000;
+    position: relative;
+}
+
+/* Only hide it when it has the hidden class AND is not being shown */
+.correct-gif-container.hidden:not([style*="display: block"]) {
+    display: none !important;
+}
+
+/* Make celebration stars always visible */
+.celebration-star {
+    color: gold;
+    font-size: 36px;
+    margin: 0 10px;
+    display: inline-block !important;
+    animation: twinkle 1.5s infinite alternate;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
+}
+
+/* Test animation button should always be visible */
+.animation-test-btn {
+    display: block !important;
+    margin: 15px auto !important;
+    background-color: #e91e63 !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+
+/* Make sure practice area is visible when needed */
+.custom-practice-area {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #eaeaea;
+    border-radius: var(--border-radius);
+}
+
+.custom-practice-area.hidden:not([style*="display: block"]) {
+    display: none;
+}
+
+/* Puppy animation specific styles */
+#correctGif {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.celebration-fallback .fa-dog {
+    color: #8B4513; /* Brown color for dog icons */
+    font-size: 36px;
+}
+
+.celebration-fallback .fa-bone {
+    color: #D2B48C; /* Tan color for bone icon */
+    font-size: 30px;
+    animation-delay: 0.3s;
+}
+
+/* Add a puppy-themed background for the container */
+.correct-gif-container {
+    background-color: rgba(254, 235, 200, 0.3) !important; /* Light warm background */
+    border: 3px solid #FFA500 !important; /* Orange border */
+}
+
+/* Dog animation specific styles */
+#correctGif {
+    max-width: 220px;
+    max-height: 220px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.celebration-fallback .fa-dog {
+    color: #8B4513; /* Brown color for dog icons */
+    font-size: 36px;
+    animation: bounce 1s infinite alternate;
+}
+
+.celebration-fallback .fa-bone {
+    color: #D2B48C; /* Tan color for bone icon */
+    font-size: 30px;
+    animation-delay: 0.3s;
+    animation: rotate 1.5s infinite linear;
+}
+
+/* Add dance animations for fallback icons */
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-15px); }
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Add a dog-themed background for the container */
+.correct-gif-container {
+    background-color: rgba(245, 245, 220, 0.4) !important; /* Beige background */
+    border: 3px solid #8B4513 !important; /* Brown border */
+}
+
+/* Super visible animation container to ensure it's seen */
+.correct-gif-container {
+    display: block !important;
+    visibility: visible !important;
+    text-align: center !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+    border-radius: 12px !important;
+    max-width: 300px !important;
+    z-index: 10000 !important;
+    position: relative !important;
+    background-color: rgba(245, 245, 220, 0.9) !important; 
+    border: 5px solid #8B4513 !important;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3) !important;
+}
+
+/* Only hide it when explicitly hidden */
+.correct-gif-container.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Super visible animation */
+#correctGif {
+    display: block !important;
+    max-width: 240px !important;
+    max-height: 240px !important;
+    margin: 0 auto !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Game-specific dancing dog animation */
+.game-celebration-container {
+    display: block !important;
+    visibility: visible !important;
+    background-color: rgba(245, 245, 220, 0.9) !important;
+    border: 5px solid #8B4513 !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    margin: 15px auto !important;
+    max-width: 280px !important;
+    text-align: center !important;
+    z-index: 9999 !important;
+    position: relative !important;
+    animation: pop-in 0.5s ease-out !important;
+}
+
+@keyframes pop-in {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Make sure dog icons have animation */
+.game-celebration-container .fa-dog {
+    animation: bounce 1s infinite alternate !important;
+}
+
+.game-celebration-container .fa-bone {
+    animation: rotate 1.5s infinite linear !important;
+}
+
+/* Custom practice-specific dog animation */
+.practice-celebration-container {
+    display: block !important;
+    visibility: visible !important;
+    background-color: rgba(245, 245, 220, 0.9) !important;
+    border: 5px solid #8B4513 !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    margin: 15px auto !important;
+    max-width: 280px !important;
+    text-align: center !important;
+    z-index: 9999 !important;
+    position: relative !important;
+    animation: bounce-in 0.6s ease-out !important;
+}
+
+@keyframes bounce-in {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.95); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Dark mode specific styles */
+body.dark-mode .instruction {
+    color: var(--instruction-color, #e0e0e0) !important;
+}
+
+body.dark-mode .table-btn {
+    color: var(--table-btn-text, #ffffff);
+    border-color: var(--table-btn-border, #7c4dff);
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .table-btn:hover {
+    background-color: rgba(138, 43, 226, 0.3);
+}
+
+body.dark-mode .table-btn.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: #ffffff;
+}
+
+body.dark-mode .table-btn.selected::after {
+    background-color: #fafafa;
+    color: var(--primary-color);
+}
+
+/* Assessment-specific dancing dog animation */
+.assessment-celebration-container {
+    display: block !important;
+    visibility: visible !important;
+    background-color: rgba(245, 245, 220, 0.9) !important;
+    border: 5px solid #8B4513 !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    margin: 15px auto !important;
+    max-width: 280px !important;
+    text-align: center !important;
+    z-index: 9999 !important;
+    position: relative !important;
+    animation: slide-in 0.5s ease-out !important;
+}
+
+@keyframes slide-in {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Animation for assessment celebration icons */
+.assessment-celebration-container .fa-dog {
+    animation: bounce 1s infinite alternate !important;
+}
+
+.assessment-celebration-container .fa-bone {
+    animation: rotate 1.5s infinite linear !important;
+}
+
+/* Reward notification styles */
+.reward-notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.reward-notification.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.reward-notification-content {
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-width: 300px;
+    animation: pop-up 0.5s ease-out;
+}
+
+.reward-notification i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.reward-notification h3 {
+    margin: 0 0 10px 0;
+    color: var(--primary-color);
+}
+
+.reward-description {
+    color: var(--light-text);
+    margin-bottom: 20px;
+}
+
+/* Reward modal styles */
+.reward-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.reward-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.reward-modal-content {
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-width: 300px;
+    animation: pop-up 0.5s ease-out;
+}
+
+@keyframes pop-up {
+    0% { transform: scale(0.8); opacity: 0; }
+    70% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Enhanced reward item styles */
+.reward-item {
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.reward-item.earned {
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+}
+
+.reward-item.locked {
+    opacity: 0.7;
+    filter: grayscale(0.8);
+    cursor: not-allowed;
+}
+
+.reward-item.earned:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
+}
+
+.reward-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.reward-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.reward-cost {
+    font-size: 0.8rem;
+    color: var(--light-text);
+    margin-bottom: 5px;
+}
+
+.reward-status {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    background-color: rgba(138, 43, 226, 0.1);
+    padding: 3px 8px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.reward-item.earned .reward-status {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+}
+
+/* Enhanced reward modal styles */
+.reward-modal-content {
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-width: 320px;
+    animation: pop-up 0.5s ease-out;
+}
+
+.reward-points {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.reward-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.reward-claim-instructions {
+    font-style: italic;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: rgba(255, 235, 59, 0.2);
+    border-radius: 5px;
+}
+
+.confirmation-message {
+    text-align: center;
+}
+
+.confirmation-message h3 {
+    color: #4CAF50;
+    margin: 10px 0;
+}
+
+/* Claim button on reward items */
+.btn-claim {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-top: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-claim:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Claimed reward styling */
+.reward-item.claimed .reward-icon {
+    position: relative;
+}
+
+.reward-item.claimed .reward-icon::after {
+    content: "✓";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #4CAF50;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.reward-item.claimed .reward-status {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+}
+
+/* Dashboard reward icons display */
+.rewards-icons {
+    display: flex !important;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.rewards-icons i {
+    font-size: 1.2rem;
+    animation: pulse 1.5s infinite alternate;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
 }

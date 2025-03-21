@@ -1,203 +1,343 @@
 /**
- * Rewards system for Multiplication Adventure
+ * Rewards module for Multiplication Adventure
  */
 
 const Rewards = (function() {
-    // Available rewards configuration
+    // Reward definitions - each with name, description, icon, and required points
     const availableRewards = [
         {
             id: 'lollypop',
-            name: 'Lollypop',
-            description: 'A sweet treat for your hard work',
-            icon: 'fa-candy-cane',
-            cost: 500
+            name: 'Lollipop',
+            description: 'Earn a sweet lollipop treat',
+            icon: 'candy-cane', 
+            requiredPoints: 500,
+            color: '#ff4081' // Pink color for candy
         },
         {
-            id: 'ice-cream',
+            id: 'ice_cream',
             name: 'Ice Cream',
-            description: 'A delicious ice cream cone',
-            icon: 'fa-ice-cream',
-            cost: 1000
+            description: 'Cool off with an ice cream treat',
+            icon: 'ice-cream',
+            requiredPoints: 1000,
+            color: '#64b5f6' // Light blue
         },
         {
             id: 'burger',
             name: 'Burger',
-            description: 'A tasty burger of your choice',
-            icon: 'fa-hamburger',
-            cost: 2000
+            description: 'Enjoy a tasty burger',
+            icon: 'hamburger',
+            requiredPoints: 2000,
+            color: '#8d6e63' // Brown
         },
         {
-            id: 'fried-chicken',
+            id: 'fried_chicken',
             name: 'Fried Chicken',
-            description: 'Crispy fried chicken meal',
-            icon: 'fa-drumstick-bite',
-            cost: 3000
+            description: 'Crunch into some fried chicken',
+            icon: 'drumstick-bite',
+            requiredPoints: 3000,
+            color: '#ffb74d' // Orange/gold
         },
         {
             id: 'pizza',
             name: 'Pizza',
-            description: 'Your favorite pizza flavor',
-            icon: 'fa-pizza-slice',
-            cost: 4000
+            description: 'Treat yourself to a pizza',
+            icon: 'pizza-slice',
+            requiredPoints: 4000,
+            color: '#ff7043' // Red/orange
         },
         {
             id: 'book',
             name: 'Book',
-            description: 'A book of your choice',
-            icon: 'fa-book',
-            cost: 5000
+            description: 'Pick out a new book to read',
+            icon: 'book',
+            requiredPoints: 5000,
+            color: '#4caf50' // Green
         },
         {
             id: 'toy',
             name: 'Toy',
-            description: 'A special toy of your choice',
-            icon: 'fa-gamepad',
-            cost: 10000
+            description: 'Choose a special toy',
+            icon: 'gamepad',
+            requiredPoints: 10000,
+            color: '#9c27b0' // Purple
         }
     ];
     
     /**
-     * Initialize rewards system
+     * Initialize the rewards module
      */
     function init() {
-        // Populate rewards grid
-        updateRewardsDisplay();
+        console.log('Initializing rewards module');
         
-        // Set up click handlers for rewards
-        document.getElementById('rewardsGrid').addEventListener('click', (e) => {
-            const rewardItem = e.target.closest('.reward-item');
-            if (rewardItem && !rewardItem.classList.contains('locked')) {
-                const rewardId = rewardItem.dataset.rewardId;
-                claimReward(rewardId);
+        // Update rewards based on current points
+        updateRewardsBasedOnPoints();
+        
+        // Update the badges display
+        updateBadgesDisplay();
+    }
+    
+    /**
+     * Check and update earned rewards based on current points
+     */
+    function updateRewardsBasedOnPoints() {
+        console.log('Checking for new rewards based on points');
+        
+        if (!window.AppCore || !window.AppCore.getState) {
+            console.error('AppCore not available for rewards check');
+            return;
+        }
+        
+        const state = AppCore.getState();
+        const currentPoints = state.points;
+        const userLevel = state.userLevel;
+        const earnedRewards = state.rewards || [];
+        
+        let newRewardsEarned = false;
+        
+        // Check each reward to see if it should be unlocked
+        availableRewards.forEach(reward => {
+            const alreadyEarned = earnedRewards.some(r => r.id === reward.id);
+            
+            if (!alreadyEarned && currentPoints >= reward.requiredPoints) {
+                // Check level requirement if applicable
+                if (!reward.requireLevel || userLevel >= reward.requireLevel) {
+                    console.log(`New reward earned: ${reward.name}`);
+                    earnedRewards.push({
+                        id: reward.id,
+                        name: reward.name,
+                        earnedAt: new Date().toISOString()
+                    });
+                    newRewardsEarned = true;
+                    
+                    // Show notification for new reward
+                    showRewardNotification(reward);
+                }
+            }
+        });
+        
+        // If new rewards were earned, update state and save
+        if (newRewardsEarned) {
+            state.rewards = earnedRewards;
+            if (window.AppCore && window.AppCore.saveUserData) {
+                AppCore.saveUserData();
+            }
+        }
+        
+        return earnedRewards;
+    }
+    
+    /**
+     * Show a notification for a new reward
+     * @param {Object} reward - The earned reward
+     */
+    function showRewardNotification(reward) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'reward-notification';
+        notification.innerHTML = `
+            <div class="reward-notification-content">
+                <i class="fas fa-${reward.icon}" style="color: ${reward.color};"></i>
+                <h3>New Reward Unlocked!</h3>
+                <p>${reward.name}</p>
+                <p class="reward-description">${reward.description}</p>
+                <button class="btn-primary">Awesome!</button>
+            </div>
+        `;
+        
+        // Add to document
+        document.body.appendChild(notification);
+        
+        // Display with animation
+        setTimeout(() => {
+            notification.classList.add('active');
+        }, 100);
+        
+        // Remove when button clicked
+        notification.querySelector('button').addEventListener('click', () => {
+            notification.classList.remove('active');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        });
+        
+        // Play celebration sound if available
+        if (window.Audio) {
+            try {
+                const celebrationSound = new Audio('sounds/reward.mp3');
+                celebrationSound.volume = 0.5;
+                celebrationSound.play().catch(e => console.log('Sound autoplay blocked by browser'));
+            } catch (e) {
+                console.log('Sound playback error:', e);
+            }
+        }
+    }
+    
+    /**
+     * Update the rewards center display
+     * @param {Number} points - Current points total
+     */
+    function updateRewardsDisplay(points) {
+        console.log('Updating rewards display with points:', points);
+        
+        // First check for any new rewards based on current points
+        const earnedRewards = updateRewardsBasedOnPoints();
+        
+        // Update the badges display
+        updateBadgesDisplay();
+        
+        // Get the rewards grid
+        const rewardsGrid = document.getElementById('rewardsGrid');
+        if (!rewardsGrid) {
+            console.error('Rewards grid not found');
+            return;
+        }
+        
+        // Clear existing rewards
+        rewardsGrid.innerHTML = '';
+        
+        // Get claimed rewards
+        const state = AppCore.getState();
+        const claimedRewards = state.claimedRewards || [];
+        
+        // Build rewards display
+        availableRewards.forEach(reward => {
+            const isEarned = earnedRewards.some(r => r.id === reward.id);
+            const isClaimed = claimedRewards.some(r => r.id === reward.id);
+            const currentPoints = state.points;
+            const canClaim = currentPoints >= reward.requiredPoints;
+            
+            const rewardItem = document.createElement('div');
+            rewardItem.className = `reward-item${isEarned ? ' earned' : ' locked'}${isClaimed ? ' claimed' : ''}`;
+            
+            rewardItem.innerHTML = `
+                <div class="reward-icon">
+                    <i class="fas fa-${reward.icon}" style="color: ${isEarned ? reward.color : '#bbbbbb'};"></i>
+                </div>
+                <div class="reward-name">${reward.name}</div>
+                <div class="reward-cost">${reward.requiredPoints} points required</div>
+                <div class="reward-status">
+                    ${isClaimed ? 'Claimed!' : (isEarned ? 'Unlocked!' : 'Locked')}
+                </div>
+                ${isEarned && !isClaimed && canClaim ? 
+                    `<button class="btn-claim">Claim Now</button>` : ''}
+            `;
+            
+            rewardsGrid.appendChild(rewardItem);
+            
+            // Add click handler for earned rewards
+            if (isEarned) {
+                rewardItem.addEventListener('click', () => {
+                    showRewardDetails(reward);
+                });
+                
+                // Add specific handler for claim button
+                const claimBtn = rewardItem.querySelector('.btn-claim');
+                if (claimBtn) {
+                    claimBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent triggering the parent click
+                        showRewardDetails(reward);
+                    });
+                }
             }
         });
     }
     
     /**
-     * Update the rewards display
-     * @param {Number} currentPoints - User's current points
+     * Update the badges display in the dashboard
      */
-    function updateRewardsDisplay(currentPoints) {
-        const rewardsGrid = document.getElementById('rewardsGrid');
-        const points = currentPoints || AppCore.getState().points;
+    function updateBadgesDisplay() {
+        console.log('Updating badges display');
         
-        // Clear existing content
-        rewardsGrid.innerHTML = '';
-        
-        // Add each reward
-        availableRewards.forEach(reward => {
-            const isLocked = points < reward.cost;
-            
-            const rewardElem = document.createElement('div');
-            rewardElem.className = `reward-item ${isLocked ? 'locked' : ''}`;
-            rewardElem.dataset.rewardId = reward.id;
-            
-            rewardElem.innerHTML = `
-                <div class="reward-icon"><i class="fas ${reward.icon}"></i></div>
-                <div class="reward-name">${reward.name}</div>
-                <div class="reward-description">${reward.description}</div>
-                <div class="reward-cost">${reward.cost} points</div>
-                <div class="reward-status">${isLocked ? 'Locked' : 'Available'}</div>
-            `;
-            
-            rewardsGrid.appendChild(rewardElem);
-        });
-    }
-    
-    /**
-     * Claim a reward
-     * @param {String} rewardId - ID of the reward to claim
-     */
-    function claimReward(rewardId) {
-        // Find the reward
-        const reward = availableRewards.find(r => r.id === rewardId);
-        if (!reward) return;
-        
-        // Check if user has enough points
-        const userState = AppCore.getState();
-        if (userState.points < reward.cost) {
-            alert('Not enough points to claim this reward!');
+        const badgesDisplay = document.getElementById('badges');
+        if (!badgesDisplay) {
+            console.error('Badges display element not found');
             return;
         }
         
-        // Show confirmation dialog
-        if (confirm(`Redeem ${reward.name} for ${reward.cost} points?`)) {
-            // Process the reward
-            processReward(reward);
+        // Get earned rewards from app state
+        let earnedRewards = [];
+        if (window.AppCore && window.AppCore.getState) {
+            earnedRewards = AppCore.getState().rewards || [];
+        }
+        
+        // Update the badges display
+        if (earnedRewards.length === 0) {
+            badgesDisplay.textContent = 'None';
+            badgesDisplay.className = 'stat-value'; // Reset any custom classes
+        } else {
+            // Clear text content
+            badgesDisplay.textContent = '';
             
-            // Update points and save
-            const newPoints = userState.points - reward.cost;
-            userState.points = newPoints;
-            AppCore.saveUserData();
+            // Add class for icon display
+            badgesDisplay.className = 'stat-value rewards-icons';
             
-            // Update UI
-            UI.updatePoints(newPoints);
-            updateRewardsDisplay(newPoints);
-            
-            // Show success message
-            showRewardConfirmation(reward);
+            // Display all earned rewards icons
+            earnedRewards.forEach(reward => {
+                // Find the full reward definition
+                const rewardDef = availableRewards.find(r => r.id === reward.id);
+                if (rewardDef) {
+                    const icon = document.createElement('i');
+                    icon.className = `fas fa-${rewardDef.icon}`;
+                    icon.style.color = rewardDef.color;
+                    icon.title = rewardDef.name;
+                    
+                    badgesDisplay.appendChild(icon);
+                }
+            });
         }
     }
     
     /**
-     * Process a claimed reward
-     * @param {Object} reward - The reward object
+     * Show details for an earned reward
+     * @param {Object} reward - The reward to show details for
      */
-    function processReward(reward) {
-        // Add reward to user's collection
-        const userState = AppCore.getState();
-        userState.rewards.push({
-            id: reward.id,
-            name: reward.name,
-            claimedAt: new Date().toISOString()
-        });
+    function showRewardDetails(reward) {
+        // Find the full reward definition to get required points
+        const rewardDefinition = availableRewards.find(r => r.id === reward.id) || reward;
+        const requiredPoints = rewardDefinition.requiredPoints;
         
-        // Handle different reward types
-        switch (reward.id) {
-            case 'extra-time':
-                // Implementation for extra time reward
-                break;
-            case 'hint-pass':
-                // Implementation for hint pass
-                break;
-            case 'skip-pass':
-                // Implementation for skip pass
-                break;
-            // Add more cases as needed
-        }
+        // Check if the user has enough points
+        const state = AppCore.getState();
+        const currentPoints = state.points;
+        const canClaim = currentPoints >= requiredPoints;
         
-        console.log(`Reward claimed: ${reward.name}`);
-    }
-    
-    /**
-     * Show reward confirmation screen
-     * @param {Object} reward - The reward object
-     */
-    function showRewardConfirmation(reward) {
         // Create modal element
         const modal = document.createElement('div');
         modal.className = 'reward-modal';
         modal.innerHTML = `
             <div class="reward-modal-content">
-                <h2>Reward Claimed!</h2>
-                <div class="reward-icon"><i class="fas ${reward.icon} fa-3x"></i></div>
-                <h3>${reward.name}</h3>
-                <p>${reward.description}</p>
-                <p class="reward-confirmation-text">Show this to your parent or teacher!</p>
-                <button class="btn-primary">Close</button>
+                <i class="fas fa-${rewardDefinition.icon}" style="color: ${rewardDefinition.color}; font-size: 3rem;"></i>
+                <h3>${rewardDefinition.name}</h3>
+                <p>${rewardDefinition.description}</p>
+                <p class="reward-points">Cost: ${requiredPoints} points</p>
+                <div class="reward-buttons">
+                    ${canClaim ? 
+                        `<button class="btn-primary claim-btn">Claim Reward</button>` : 
+                        `<button class="btn-primary claim-btn" disabled style="opacity: 0.5; cursor: not-allowed;">Not Enough Points</button>`
+                    }
+                    <button class="btn-secondary close-btn">Close</button>
+                </div>
             </div>
         `;
         
         // Add to document
         document.body.appendChild(modal);
         
-        // Add animation class
+        // Display with animation
         setTimeout(() => {
             modal.classList.add('active');
-        }, 10);
+        }, 100);
         
-        // Remove when button clicked
-        modal.querySelector('button').addEventListener('click', () => {
+        // Add claim handler
+        const claimBtn = modal.querySelector('.claim-btn');
+        if (claimBtn && canClaim) {
+            claimBtn.addEventListener('click', () => {
+                claimReward(rewardDefinition, modal);
+            });
+        }
+        
+        // Remove when close button clicked
+        modal.querySelector('.close-btn').addEventListener('click', () => {
             modal.classList.remove('active');
             setTimeout(() => {
                 modal.remove();
@@ -205,15 +345,130 @@ const Rewards = (function() {
         });
     }
     
+    /**
+     * Claim a reward and deduct points
+     * @param {Object} reward - The reward to claim
+     * @param {Element} modal - The modal element to update
+     */
+    function claimReward(reward, modal) {
+        console.log(`Claiming reward: ${reward.name}, cost: ${reward.requiredPoints} points`);
+        
+        // Get current state
+        const state = AppCore.getState();
+        const currentPoints = state.points;
+        
+        // Verify user has enough points
+        if (currentPoints < reward.requiredPoints) {
+            console.error('Not enough points to claim reward');
+            
+            // Show error message
+            const contentDiv = modal.querySelector('.reward-modal-content');
+            contentDiv.innerHTML += `
+                <p class="error-message" style="color: red; margin-top: 10px;">
+                    You don't have enough points to claim this reward.
+                </p>
+            `;
+            
+            return;
+        }
+        
+        // Add to claimed rewards if not already tracked
+        if (!state.claimedRewards) {
+            state.claimedRewards = [];
+        }
+        
+        // Record this claim
+        state.claimedRewards.push({
+            id: reward.id,
+            name: reward.name,
+            points: reward.requiredPoints,
+            claimedAt: new Date().toISOString()
+        });
+        
+        // Deduct points
+        const newPointsTotal = currentPoints - reward.requiredPoints;
+        state.points = newPointsTotal;
+        
+        // Update UI
+        if (window.UI && UI.updatePoints) {
+            UI.updatePoints(newPointsTotal);
+        }
+        
+        // Save the updated state
+        if (AppCore.saveUserData) {
+            AppCore.saveUserData();
+        }
+        
+        // Update modal to show confirmation
+        const modalContent = modal.querySelector('.reward-modal-content');
+        modalContent.innerHTML = `
+            <div class="confirmation-message">
+                <i class="fas fa-check-circle" style="color: #4CAF50; font-size: 3rem;"></i>
+                <h3>Reward Claimed!</h3>
+                <p>You have successfully claimed the ${reward.name}.</p>
+                <p>Your new points balance: <strong>${newPointsTotal}</strong></p>
+                <p class="reward-claim-instructions">Show this screen to your parent or teacher to receive your reward.</p>
+                <button class="btn-primary print-btn">
+                    <i class="fas fa-print"></i> Print Confirmation
+                </button>
+                <button class="btn-secondary done-btn">Done</button>
+            </div>
+        `;
+        
+        // Add event listeners to new buttons
+        const printBtn = modalContent.querySelector('.print-btn');
+        if (printBtn) {
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+        }
+        
+        const doneBtn = modalContent.querySelector('.done-btn');
+        if (doneBtn) {
+            doneBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.remove();
+                    
+                    // Refresh rewards display
+                    updateRewardsDisplay(newPointsTotal);
+                }, 300);
+            });
+        }
+    }
+    
     // Public API
     return {
         init,
         updateRewardsDisplay,
-        claimReward
+        updateBadgesDisplay,
+        updateRewardsBasedOnPoints
     };
 })();
 
-// Initialize rewards when document is ready
+// Initialize rewards module when document is ready
 document.addEventListener('DOMContentLoaded', function() {
     Rewards.init();
+    
+    // Check for rewards when points change
+    if (window.AppCore && window.AppCore.addPoints) {
+        // Save the original addPoints function
+        const originalAddPoints = AppCore.addPoints;
+        
+        // Replace with a new function that also updates rewards
+        AppCore.addPoints = function(points) {
+            // Call the original function
+            const result = originalAddPoints(points);
+            
+            // Update rewards based on new points
+            Rewards.updateRewardsBasedOnPoints();
+            
+            // Update badges display
+            Rewards.updateBadgesDisplay();
+            
+            return result;
+        };
+    }
 });
+
+console.log('Rewards module loaded');
