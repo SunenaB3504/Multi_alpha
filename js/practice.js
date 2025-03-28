@@ -839,6 +839,13 @@ const Practice = (function() {
      * @param {string} soundType - Type of sound to play
      */
     function playSound(soundType) {
+        // Try using SoundManager first (preferred method)
+        if (window.SoundManager && typeof SoundManager.play === 'function') {
+            SoundManager.play(soundType);
+            return;
+        }
+        
+        // Fall back to direct Audio playback if SoundManager is not available
         if (window.Settings && Settings.isSoundEnabled && Settings.isSoundEnabled()) {
             let soundFile = '';
             

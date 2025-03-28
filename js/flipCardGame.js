@@ -453,21 +453,28 @@ const FlipCardGame = (function() {
      * @param {string} soundType - Type of sound to play
      */
     function playSound(soundType) {
+        // Use SoundManager if available
+        if (window.SoundManager && typeof SoundManager.play === 'function') {
+            SoundManager.play(soundType);
+            return;
+        }
+        
+        // Legacy sound handling as fallback
         if (window.Settings && Settings.isSoundEnabled && Settings.isSoundEnabled()) {
             let soundFile = '';
             
             switch (soundType) {
                 case 'flip':
-                    soundFile = 'sounds/card-flip.mp3';
+                    soundFile = 'sounds/click.mp3';
                     break;
                 case 'match':
-                    soundFile = 'sounds/match.mp3';
+                    soundFile = 'sounds/correct.mp3';
                     break;
                 case 'mismatch':
-                    soundFile = 'sounds/mismatch.mp3';
+                    soundFile = 'sounds/incorrect.mp3';
                     break;
                 case 'victory':
-                    soundFile = 'sounds/victory.mp3';
+                    soundFile = 'sounds/complete.mp3';
                     break;
             }
             

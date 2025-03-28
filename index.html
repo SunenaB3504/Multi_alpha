@@ -2,39 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">maximum-scale=1.0, user-scalable=no">
     <title>Multiplication Adventure</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="css/flipCardGame.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json">tent="MultiAdv">
     <meta name="theme-color" content="#4285f4">
-    <style>
-        h1, h2, .welcome-banner h2 {
-            font-family: 'Fredoka One', cursive;
+    <meta name="color-scheme" content="light dark">ent="#4285f4">
+    <style>ame="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        h1, h2, .welcome-banner h2 {rl" content="/">
+            font-family: 'Fredoka One', cursive;width, initial-scale=1, shrink-to-fit=no">
         }
-        .sparkle {
-            position: absolute;
-            pointer-events: none;
-            animation: float 3s infinite alternate;
-            opacity: 0.7;
+        .sparkle { -->
+            position: absolute;e/png" sizes="192x192" href="images/icon-192.png">
+            pointer-events: none;type="image/png" sizes="192x192" href="images/icon-192.png">
+            animation: float 3s infinite alternate;2" href="images/icon-512.png">
+            opacity: 0.7;h-icon" type="image/png" sizes="512x512" href="images/icon-512.png">
         }
         @keyframes float {
             0% { transform: translateY(0) rotate(0); }
             100% { transform: translateY(-10px) rotate(10deg); }
-        }
-    </style>
-</head>
-<body>
+        }Stylesheets -->
+        .sr-only {lesheet" href="styles.css">
+            position: absolute;="css/flipCardGame.css">
+            width: 1px;et" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            height: 1px;fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+            padding: 0;/fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+            margin: -1px;eme" content="light dark">
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);{
+            white-space: nowrap;a One', cursive;
+            border-width: 0;
+        }sparkle {
+    </style>position: absolute;
+</head>     pointer-events: none;
+<body>      animation: float 3s infinite alternate;
     <div class="app-container">
         <header class="app-header">
             <div class="sparkle" style="top: 10px; left: 10%; font-size: 20px;">✨</div>
             <div class="sparkle" style="top: 30px; right: 20%; font-size: 24px;">⭐</div>
             <h1><i class="fas fa-calculator"></i> Multiplication Adventure</h1>
-            <button id="settingsBtn" class="btn-icon"><i class="fas fa-cog"></i></button>
-        </header>
+            <button id="settingsBtn" class="btn-icon" title="Open Settings" aria-label="Open Settings"><i class="fas fa-cog"></i></button>
+        </header>{
         <main class="app-main">
             <!-- Dashboard -->
             <section id="dashboard" class="app-section active">
@@ -43,394 +55,474 @@
                     <div class="sparkle" style="top: 10px; right: 25%; font-size: 22px;">🌟</div>
                     <h2>Welcome, Math Explorer!</h2>
                     <p class="subtitle">Continue your magical multiplication journey</p>
-                </div>
+                </div>th: 0;
                 <div id="progress" class="progress-stats">
                     <div class="stat-card">
                         <i class="fas fa-layer-group"></i>
                         <div class="stat-info">
                             <span class="stat-label">Level</span>
                             <span id="level" class="stat-value">1</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-star"></i>
+                        </div>e" style="top: 10px; left: 10%; font-size: 20px;">✨</div>
+                    </div>arkle" style="top: 30px; right: 20%; font-size: 24px;">⭐</div>
+                    <div class="stat-card">"></i> Multiplication Adventure</h1>
+                        <i class="fas fa-star"></i>n" title="Open Settings" aria-label="Open Settings"><i class="fas fa-cog"></i></button>
                         <div class="stat-info">
                             <span class="stat-label">Points</span>
                             <span id="points" class="stat-value">0</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-gift"></i>
-                        <div class="stat-info">
-                            <span class="stat-label">Rewards</span>
+                        </div>oard" class="app-section active">
+                    </div>="welcome-banner">
+                    <div class="stat-card">yle="top: -20px; left: 30%; font-size: 28px;">✨</div>
+                        <i class="fas fa-gift"></i>: 10px; right: 25%; font-size: 22px;">🌟</div>
+                        <div class="stat-info"></h2>
+                            <span class="stat-label">Rewards</span>plication journey</p>
                             <span id="badges" class="stat-value">None</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="level-progress">
+                        </div>ess" class="progress-stats">
+                    </div>lass="stat-card">
+                </div>  <i class="fas fa-layer-group"></i>
+                        <div class="stat-info">
+                <div class="level-progress">t-label">Level</span>
                     <div class="level-progress-label">Progress to next level:</div>
                     <div class="progress-bar-container">
                         <div id="levelProgressBar" class="progress-bar" style="width: 0%"></div>
-                    </div>
+                    </div>lass="stat-card">
                     <div class="level-progress-info">
                         <span id="currentPoints">0</span> / <span id="nextLevelPoints">100</span> points
-                    </div>
-                </div>
-                
+                    </div>  <span class="stat-label">Points</span>
+                </div>      <span id="points" class="stat-value">0</span>
+                        </div>
                 <div class="level-selector">
                     <div class="level-label">Choose Multiplication Tables:</div>
-                    <div class="level-buttons">
+                    <div class="level-buttons"></i>
                         <button id="level1Btn" class="level-btn active">Level 1</button>
                         <button id="level2Btn" class="level-btn">Level 2</button>
                         <button id="level3Btn" class="level-btn">Level 3</button>
-                    </div>
+                    </div>div>
                     <p class="level-info">Level 1: Basic Tables (1-5)<br>
                        Level 2: Intermediate Tables (6-9)<br>
                        Level 3: Advanced Tables (10-12)
-                    </p>
-                </div>
-                
-                <div class="action-buttons">
+                    </p>ss="level-progress">
+                </div>iv class="level-progress-label">Progress to next level:</div>
+                    <div class="progress-bar-container">
+                <div class="action-buttons">ssBar" class="progress-bar" style="width: 0%"></div>
                     <button id="startAssessment" class="btn-primary"><i class="fas fa-clipboard-check"></i> Take Assessment</button>
                     <button id="playGame" class="btn-secondary"><i class="fas fa-gamepad"></i> Flash Cards</button>
                     <button id="openGenerator" class="btn-tertiary"><i class="fas fa-magic"></i> Custom Practice</button>
                     <button id="playFlipCardGame" class="btn-secondary"><i class="fas fa-clone"></i> Matching Game</button>
                     <button id="openRewards" class="btn-reward"><i class="fas fa-gift"></i> Rewards Center</button>
                 </div>
-            </section>
-
-            <!-- Assessment -->
-            <section id="assessment" class="app-section hidden">
-                <div class="section-header">
+            </section>lass="level-selector">
+                    <div class="level-label">Choose Multiplication Tables:</div>
+            <!-- Assessment -->"level-buttons">
+            <section id="assessment" class="app-section hidden">active">Level 1</button>
+                <div class="section-header">n" class="level-btn">Level 2</button>
                     <h2><i class="fas fa-clipboard-check"></i> Multiplication Assessment</h2>
                     <div class="points-display">
                         <i class="fas fa-star"></i> <span class="points-value">0</span> points
-                    </div>
-                </div>
+                    </div>el 2: Intermediate Tables (6-9)<br>
+                </div> Level 3: Advanced Tables (10-12)
                 <div class="card">
                     <p class="instruction">Solve the multiplication problem:</p>
                     <div class="math-problem">
                         <span id="factor1">5</span> × <span id="factor2">7</span> = ?
-                    </div>
-                    <div class="input-group">
-                        <input type="number" id="assessmentInput" placeholder="Type your answer" class="text-input">
-                        <button id="submitAssessment" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
+                    </div>n id="startAssessment" class="btn-primary"><i class="fas fa-clipboard-check"></i> Take Assessment</button>
+                    <div class="input-group">ss="btn-secondary"><i class="fas fa-gamepad"></i> Flash Cards</button>
+                        <label for="assessmentInput" class="sr-only">Your Answer</label>ic"></i> Custom Practice</button>
+                        <input type="number" id="assessmentInput" placeholder="Type your answer" class="text-input" aria-label="Your answer">
+                        <button id="submitAssessment" class="btn-submit" title="Submit Answer"><i class="fas fa-paper-plane"></i> Submit</button>
                     </div>
                     <p id="assessmentFeedback" class="feedback"></p>
                 </div>
-                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-            </section>
-
-            <!-- Flash Cards Game -->
-            <section id="game" class="app-section hidden">
+                <button class="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>d="assessment" class="app-section hidden">
                 <div class="section-header">
+            <!-- Flash Cards Game --> fa-clipboard-check"></i> Multiplication Assessment</h2>
+            <section id="game" class="app-section hidden">
+                <div class="section-header">r"></i> <span class="points-value">0</span> points
                     <h2><i class="fas fa-gamepad"></i> Multiplication Flash Cards</h2>
                     <div class="points-display">
                         <i class="fas fa-star"></i> <span class="points-value">0</span> points
-                    </div>
-                </div>
-                <div class="card">
+                    </div>ss="instruction">Solve the multiplication problem:</p>
+                </div>iv class="math-problem">
+                <div class="card">factor1">5</span> × <span id="factor2">7</span> = ?
                     <p class="instruction">Quickly solve this multiplication:</p>
                     <div class="math-problem">
                         <span id="gameFactor1">3</span> × <span id="gameFactor2">6</span> = ?
-                    </div>
-                    <div class="input-group">
-                        <input type="number" id="gameInput" placeholder="Type your answer" class="text-input">
-                        <button id="submitGame" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
-                    </div>
+                    </div>nput type="number" id="assessmentInput" placeholder="Type your answer" class="text-input" aria-label="Your answer">
+                    <div class="input-group">essment" class="btn-submit" title="Submit Answer"><i class="fas fa-paper-plane"></i> Submit</button>
+                        <label for="gameInput" class="sr-only">Your Answer</label>
+                        <input type="number" id="gameInput" placeholder="Type your answer" class="text-input" aria-label="Your answer">
+                        <button id="submitGame" class="btn-submit" title="Submit Answer"><i class="fas fa-paper-plane"></i> Submit</button>
+                    </div>ass="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
                     <p id="gameFeedback" class="feedback"></p>
                     <div class="timer-container">
                         <div class="timer-label">Time remaining:</div>
-                        <div class="timer-bar-container">
+                        <div class="timer-bar-container">>
                             <div id="timerBar" class="timer-bar"></div>
-                        </div>
-                    </div>
-                    <button id="nextProblem" class="btn-primary"><i class="fas fa-forward"></i> Next Problem</button>
-                </div>
-                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-            </section>
-
+                        </div>ss="fas fa-gamepad"></i> Multiplication Flash Cards</h2>
+                    </div>lass="points-display">
+                    <button id="nextProblem" class="btn-primary" title="Go to Next Problem"><i class="fas fa-forward"></i> Next Problem</button>
+                </div>div>
+                <button class="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>lass="card">
+                    <p class="instruction">Quickly solve this multiplication:</p>
             <!-- Custom Practice Generator -->
-            <section id="wordGenerator" class="app-section hidden">
+            <section id="wordGenerator" class="app-section hidden">"gameFactor2">6</span> = ?
                 <div class="section-header">
                     <h2><i class="fas fa-magic"></i> Custom Practice</h2>
-                    <div class="points-display">
-                        <i class="fas fa-star"></i> <span class="points-value">0</span> points
-                    </div>
-                </div>
-                <div class="card">
+                    <div class="points-display">lass="sr-only">Your Answer</label>
+                        <i class="fas fa-star"></i> <span class="points-value">0</span> pointsss="text-input" aria-label="Your answer">
+                    </div>utton id="submitGame" class="btn-submit" title="Submit Answer"><i class="fas fa-paper-plane"></i> Submit</button>
+                </div>div>
+                <div class="card">dback" class="feedback"></p>
                     <p class="instruction">Tap the multiplication tables you want to practice:</p>
-                    <div class="custom-tables">
-                        <div class="table-selection">
+                    <div class="custom-tables">">Time remaining:</div>
+                        <div class="table-selection">er">
                             <button class="table-btn" data-table="1">1×</button>
                             <button class="table-btn" data-table="2">2×</button>
                             <button class="table-btn" data-table="3">3×</button>
-                            <button class="table-btn" data-table="4">4×</button>
+                            <button class="table-btn" data-table="4">4×</button>xt Problem"><i class="fas fa-forward"></i> Next Problem</button>
                             <button class="table-btn" data-table="5">5×</button>
-                            <button class="table-btn" data-table="6">6×</button>
+                            <button class="table-btn" data-table="6">6×</button>as fa-arrow-left"></i> Back to Dashboard</button>
                             <button class="table-btn" data-table="7">7×</button>
                             <button class="table-btn" data-table="8">8×</button>
                             <button class="table-btn" data-table="9">9×</button>
                             <button class="table-btn" data-table="10">10×</button>
                             <button class="table-btn" data-table="11">11×</button>
                             <button class="table-btn" data-table="12">12×</button>
-                        </div>
-                        <div class="practice-mode-selector">
+                        </div>="points-display">
+                        <div class="practice-mode-selector">ass="points-value">0</span> points
                             <div class="mode-label">Select Practice Mode:</div>
                             <div class="mode-toggle">
                                 <button id="standardModeBtn" class="mode-btn active">Standard</button>
-                                <button id="matchingModeBtn" class="mode-btn">Matching</button>
-                            </div>
-                        </div>
+                                <button id="matchingModeBtn" class="mode-btn">Matching</button>/p>
+                            </div>stom-tables">
+                        </div>lass="table-selection">
                         <button id="generatePractice" class="btn-submit"><i class="fas fa-rocket"></i> Start Practice</button>
-                    </div>
-                    
-                    <div class="custom-practice-area hidden">
-                        <div class="math-problem">
+                    </div>  <button class="table-btn" data-table="2">2×</button>
+                            <button class="table-btn" data-table="3">3×</button>
+                    <div class="custom-practice-area hidden">ble="4">4×</button>
+                        <div class="math-problem">tn" data-table="5">5×</button>
                             <span id="customFactor1">4</span> × <span id="customFactor2">8</span> = ?
-                        </div>
-                        <div class="input-group">
-                            <input type="number" id="customInput" placeholder="Type your answer" class="text-input">
-                            <button id="submitCustom" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
-                        </div>
+                        </div>utton class="table-btn" data-table="7">7×</button>
+                        <div class="input-group">btn" data-table="8">8×</button>
+                            <label for="customInput" class="sr-only">Your Answer</label>
+                            <input type="number" id="customInput" placeholder="Type your answer" class="text-input" aria-label="Your answer">
+                            <button id="submitCustom" class="btn-submit" title="Submit Answer"><i class="fas fa-paper-plane"></i> Submit</button>
+                        </div>utton class="table-btn" data-table="12">12×</button>
                         <p id="customFeedback" class="feedback"></p>
                         <div id="correctGifContainer" class="correct-gif-container hidden">
-                            <img id="correctGif" 
+                            <img id="correctGif" l">Select Practice Mode:</div>
                                  src="images/dancing_dog.gif" 
-                                 alt="Dancing dog celebration" 
+                                 alt="Dancing dog celebration" ass="mode-btn active">Standard</button>
                                  onload="console.log('Local dancing dog animation loaded successfully')"
                                  onerror="this.onerror=null; this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjdsOWsweXE5ZngzaGFiMm5mMWprdG4zangyOW8wZDc0Y2pxODNuZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9tx0gy61kmcdG/giphy.gif'; console.log('Fallback to online GIF');">
                             <p style="margin: 10px 0; color: #8B4513; font-weight: bold;">Great job! 🎉</p>
-                            <div class="celebration-fallback">
+                            <div class="celebration-fallback">tn-submit"><i class="fas fa-rocket"></i> Start Practice</button>
                                 <i class="fas fa-dog celebration-star"></i>
                                 <i class="fas fa-bone celebration-star"></i>
                                 <i class="fas fa-dog celebration-star"></i>
-                            </div>
-                        </div>
-                        <button id="nextCustomProblem" class="btn-primary"><i class="fas fa-forward"></i> Next Problem</button>
-                    </div>
-                    
-                    <div class="custom-matching-area hidden">
-                        <div class="game-stats">
+                            </div>="math-problem">
+                        </div>pan id="customFactor1">4</span> × <span id="customFactor2">8</span> = ?
+                        <button id="nextCustomProblem" class="btn-primary" title="Go to Next Problem"><i class="fas fa-forward"></i> Next Problem</button>
+                    </div>iv class="input-group">
+                            <label for="customInput" class="sr-only">Your Answer</label>
+                    <div class="custom-matching-area hidden">put" placeholder="Type your answer" class="text-input" aria-label="Your answer">
+                        <div class="game-stats">stom" class="btn-submit" title="Submit Answer"><i class="fas fa-paper-plane"></i> Submit</button>
                             <div class="stat-item">
                                 <span class="stat-label">Matches:</span>
-                                <span id="customMatchesCount" class="stat-value">0</span>
-                            </div>
-                            <div class="stat-item">
+                                <span id="customMatchesCount" class="stat-value">0</span>">
+                            </div>d="correctGif" 
+                            <div class="stat-item">g_dog.gif" 
                                 <span class="stat-label">Moves:</span>
-                                <span id="customMovesCount" class="stat-value">0</span>
-                            </div>
-                            <div class="stat-item">
+                                <span id="customMovesCount" class="stat-value">0</span>d successfully')"
+                            </div>nerror="this.onerror=null; this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjdsOWsweXE5ZngzaGFiMm5mMWprdG4zangyOW8wZDc0Y2pxODNuZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9tx0gy61kmcdG/giphy.gif'; console.log('Fallback to online GIF');">
+                            <div class="stat-item">0; color: #8B4513; font-weight: bold;">Great job! 🎉</p>
                                 <span class="stat-label">Time:</span>
                                 <span id="customGameTime" class="stat-value">0:00</span>
-                            </div>
-                        </div>
+                            </div> class="fas fa-bone celebration-star"></i>
+                        </div>  <i class="fas fa-dog celebration-star"></i>
                         <div class="flip-card-grid" id="customFlipCardGrid">
                             <!-- Cards will be generated by JavaScript -->
-                        </div>
+                        </div>n id="nextCustomProblem" class="btn-primary" title="Go to Next Problem"><i class="fas fa-forward"></i> Next Problem</button>
                         <div id="customGameCompleteMessage" class="game-complete-message hidden">
                             <h3>Congratulations! 🎉</h3>
                             <p>You completed the game in <span id="customFinalMoves">0</span> moves and <span id="customFinalTime">0:00</span>!</p>
                             <p>You earned <span id="customEarnedPoints" class="earned-points">0</span> points!</p>
                             <button id="practiceAgainBtn" class="btn-primary"><i class="fas fa-play"></i> Practice Again</button>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-            </section>
-
-            <!-- Settings -->
+                        </div>  <span class="stat-label">Matches:</span>
+                    </div>      <span id="customMatchesCount" class="stat-value">0</span>
+                </div>      </div>
+                <button class="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>          <span class="stat-label">Moves:</span>
+                                <span id="customMovesCount" class="stat-value">0</span>
+            <!-- Settings -->/div>
             <section id="settings" class="app-section hidden">
-                <div class="section-header">
-                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                <div class="section-header">"stat-label">Time:</span>
+                    <h2><i class="fas fa-cog"></i> Settings</h2>"stat-value">0:00</span>
                     <div class="points-display">
                         <i class="fas fa-star"></i> <span class="points-value">0</span> points
-                    </div>
-                </div>
+                    </div>iv class="flip-card-grid" id="customFlipCardGrid">
+                </div>      <!-- Cards will be generated by JavaScript -->
                 <div class="card settings-card">
-                    <div class="setting-option">
-                        <label class="switch">
-                            <input type="checkbox" id="highContrast">
-                            <span class="slider round"></span>
-                        </label>
+                    <div class="setting-option">eteMessage" class="game-complete-message hidden">
+                        <label for="highContrast" class="switch">
+                            <input type="checkbox" id="highContrast" aria-label="Toggle Dark Mode"> and <span id="customFinalTime">0:00</span>!</p>
+                            <span class="slider round"></span>edPoints" class="earned-points">0</span> points!</p>
+                        </label>ton id="practiceAgainBtn" class="btn-primary"><i class="fas fa-play"></i> Practice Again</button>
                         <div class="setting-label">Dark Mode</div>
                     </div>
                     <div class="setting-option">
-                        <label class="setting-label">Text Size:</label>
-                        <select id="textSize" class="select-dropdown">
+                        <label for="textSize" class="setting-label">Text Size:</label>arrow-left"></i> Back to Dashboard</button>
+                        <select id="textSize" class="select-dropdown" aria-label="Select Text Size">
                             <option value="small">Small</option>
                             <option value="medium" selected>Medium</option>
                             <option value="large">Large</option>
-                        </select>
-                    </div>
+                        </select>on-header">
+                    </div> class="fas fa-cog"></i> Settings</h2>
                     <div class="setting-option">
-                        <label class="setting-label">Timer Duration:</label>
-                        <select id="timerDuration" class="select-dropdown">
+                        <label for="timerDuration" class="setting-label">Timer Duration:</label>
+                        <select id="timerDuration" class="select-dropdown" aria-label="Select Timer Duration">
                             <option value="10">10 seconds</option>
                             <option value="15" selected>15 seconds</option>
                             <option value="20">20 seconds</option>
                             <option value="30">30 seconds</option>
-                        </select>
-                    </div>
+                        </select>t type="checkbox" id="highContrast" aria-label="Toggle Dark Mode">
+                    </div>  <span class="slider round"></span>
                     <div class="setting-option">
-                        <label class="switch">
-                            <input type="checkbox" id="soundEnabled" checked>
+                        <label for="soundEnabled" class="switch">>
+                            <input type="checkbox" id="soundEnabled" checked aria-label="Toggle Sound Effects">
                             <span class="slider round"></span>
-                        </label>
-                        <div class="setting-label">Sound Effects</div>
-                    </div>
-                    <button id="saveSettings" class="btn-primary"><i class="fas fa-save"></i> Save</button>
-                </div>
-                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-            </section>
-
-            <!-- Rewards Center -->
-            <section id="rewardsCenter" class="app-section hidden">
-                <div class="section-header">
-                    <h2><i class="fas fa-gift"></i> Rewards Center</h2>
-                    <div class="points-display">
+                        </label>or="textSize" class="setting-label">Text Size:</label>
+                        <div class="setting-label">Sound Effects</div>aria-label="Select Text Size">
+                    </div>  <option value="small">Small</option>
+                    <button id="saveSettings" class="btn-primary" title="Save Settings"><i class="fas fa-save"></i> Save</button>
+                </div>      <option value="large">Large</option>
+                <button class="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>div>
+                    <div class="setting-option">
+            <!-- Rewards Center -->"timerDuration" class="setting-label">Timer Duration:</label>
+            <section id="rewardsCenter" class="app-section hidden">opdown" aria-label="Select Timer Duration">
+                <div class="section-header">0">10 seconds</option>
+                    <h2><i class="fas fa-gift"></i> Rewards Center</h2>ion>
+                    <div class="points-display">0 seconds</option>
                         <i class="fas fa-star"></i> <span class="points-value">0</span> points
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="current-points">
-                        <h3>Your Points: <span id="rewardPoints">0</span></h3>
-                    </div>
+                    </div>select>
+                </div>div>
+                <div class="card">tting-option">
+                    <div class="current-points">" class="switch">
+                        <h3>Your Points: <span id="rewardPoints">0</span></h3>ria-label="Toggle Sound Effects">
+                    </div>  <span class="slider round"></span>
                     <p class="instruction">Collect points by solving multiplication problems correctly to earn these rewards!</p>
-                    
+                        <div class="setting-label">Sound Effects</div>
                     <div class="rewards-grid" id="rewardsGrid"></div>
-                    
+                    <button id="saveSettings" class="btn-primary" title="Save Settings"><i class="fas fa-save"></i> Save</button>
                     <div class="reward-info">
-                        <p><i class="fas fa-info-circle"></i> When you have enough points, click on a reward to claim it. 
+                        <p><i class="fas fa-info-circle"></i> When you have enough points, click on a reward to claim it. button>
                         Show the confirmation screen to your parent to receive your reward!</p>
                     </div>
-                </div>
-                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-            </section>
-
+                </div>ds Center -->
+                <button class="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>lass="section-header">
+                    <h2><i class="fas fa-gift"></i> Rewards Center</h2>
             <!-- Multiplication Table Reference -->
-            <section id="tableReference" class="app-section hidden">
+            <section id="tableReference" class="app-section hidden">nts-value">0</span> points
                 <div class="section-header">
                     <h2><i class="fas fa-table"></i> Multiplication Tables</h2>
-                </div>
-                <div class="card">
-                    <div class="table-selector">
+                </div>lass="card">
+                <div class="card">rrent-points">
+                    <div class="table-selector">d="rewardPoints">0</span></h3>
                         <button class="table-ref-btn active" data-table="1">1×</button>
-                        <button class="table-ref-btn" data-table="2">2×</button>
+                        <button class="table-ref-btn" data-table="2">2×</button>ion problems correctly to earn these rewards!</p>
                         <button class="table-ref-btn" data-table="3">3×</button>
                         <button class="table-ref-btn" data-table="4">4×</button>
                         <button class="table-ref-btn" data-table="5">5×</button>
                         <button class="table-ref-btn" data-table="6">6×</button>
-                        <button class="table-ref-btn" data-table="7">7×</button>
-                        <button class="table-ref-btn" data-table="8">8×</button>
+                        <button class="table-ref-btn" data-table="7">7×</button>gh points, click on a reward to claim it. 
+                        <button class="table-ref-btn" data-table="8">8×</button>our reward!</p>
                         <button class="table-ref-btn" data-table="9">9×</button>
                         <button class="table-ref-btn" data-table="10">10×</button>
-                        <button class="table-ref-btn" data-table="11">11×</button>
+                        <button class="table-ref-btn" data-table="11">11×</button> fa-arrow-left"></i> Back to Dashboard</button>
                         <button class="table-ref-btn" data-table="12">12×</button>
                     </div>
                     <div class="multiplication-table" id="multiplicationTable">
                         <!-- Table content will be generated by JavaScript -->
-                    </div>
-                </div>
-                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-            </section>
-
-            <!-- Flip Card Game -->
-            <section id="flipCardGame" class="app-section hidden">
-                <div class="section-header">
-                    <h2><i class="fas fa-clone"></i> Multiplication Match</h2>
-                    <div class="points-display">
+                    </div>="section-header">
+                </div>2><i class="fas fa-table"></i> Multiplication Tables</h2>
+                <button class="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>lass="card">
+                    <div class="table-selector">
+            <!-- Flip Card Game -->ss="table-ref-btn active" data-table="1">1×</button>
+            <section id="flipCardGame" class="app-section hidden">2">2×</button>
+                <div class="section-header">-ref-btn" data-table="3">3×</button>
+                    <h2><i class="fas fa-clone"></i> Multiplication Match</h2>n>
+                    <div class="points-display">-btn" data-table="5">5×</button>
                         <i class="fas fa-star"></i> <span class="points-value">0</span> points
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="game-controls">
-                        <div class="level-buttons">
+                    </div>utton class="table-ref-btn" data-table="7">7×</button>
+                </div>  <button class="table-ref-btn" data-table="8">8×</button>
+                <div class="card">ass="table-ref-btn" data-table="9">9×</button>
+                    <div class="game-controls">f-btn" data-table="10">10×</button>
+                        <div class="level-buttons">n" data-table="11">11×</button>
                             <button class="flip-game-level-btn active" data-level="easy">Easy</button>
                             <button class="flip-game-level-btn" data-level="medium">Medium</button>
                             <button class="flip-game-level-btn" data-level="hard">Hard</button>
-                        </div>
+                        </div>able content will be generated by JavaScript -->
                         <div class="game-stats">
                             <div class="stat-item">
-                                <span class="stat-label">Matches:</span>
+                                <span class="stat-label">Matches:</span>class="fas fa-arrow-left"></i> Back to Dashboard</button>
                                 <span id="matchesCount" class="stat-value">0</span>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Moves:</span>
                                 <span id="movesCount" class="stat-value">0</span>
-                            </div>
+                            </div>fas fa-clone"></i> Multiplication Match</h2>
                             <div class="stat-item">
-                                <span class="stat-label">Time:</span>
+                                <span class="stat-label">Time:</span>ts-value">0</span> points
                                 <span id="gameTime" class="stat-value">0:00</span>
                             </div>
-                        </div>
+                        </div>rd">
                         <button id="restartFlipGame" class="btn-secondary"><i class="fas fa-redo"></i> New Game</button>
-                    </div>
-                    <div class="flip-card-grid" id="flipCardGrid">
-                        <!-- Cards will be generated by JavaScript -->
-                    </div>
+                    </div>iv class="level-buttons">
+                    <div class="flip-card-grid" id="flipCardGrid">ive" data-level="easy">Easy</button>
+                        <!-- Cards will be generated by JavaScript -->evel="medium">Medium</button>
+                    </div>  <button class="flip-game-level-btn" data-level="hard">Hard</button>
                     <div id="gameCompleteMessage" class="game-complete-message hidden">
                         <h3>Congratulations! 🎉</h3>
                         <p>You completed the game in <span id="finalMoves">0</span> moves and <span id="finalTime">0:00</span>!</p>
                         <p>You earned <span id="earnedPoints" class="earned-points">0</span> points!</p>
                         <button id="playAgainBtn" class="btn-primary"><i class="fas fa-play"></i> Play Again</button>
-                    </div>
-                </div>
-                <button class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-            </section>
-        </main>
-        <footer class="app-footer">
+                    </div>  </div>
+                </div>      <div class="stat-item">
+                <button class="btn-back" title="Return to Dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+            </section>          <span id="movesCount" class="stat-value">0</span>
+        </main>             </div>
+        <footer class="app-footer">ass="stat-item">
             <p>© 2025 Multiplication Adventure by Math Explorers | <span class="ai-badge"><i class="fas fa-brain"></i> AI Powered</span></p>
-        </footer>
-    </div>
-    
-    <!-- Scripts -->
-    <script>
-        console.log('HTML loaded, initializing scripts');
-        document.addEventListener('click', function(e) {
+        </footer>               <span id="gameTime" class="stat-value">0:00</span>
+    </div>                  </div>
+                        </div>
+    <!-- Scripts -->    <button id="restartFlipGame" class="btn-secondary"><i class="fas fa-redo"></i> New Game</button>
+    <script>        </div>
+        console.log('HTML loaded, initializing scripts');ardGrid">
+        document.addEventListener('click', function(e) {JavaScript -->
             console.log('Click detected on:', e.target);
-        }, false);
-
-        // Register the service worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
+        }, false);  <div id="gameCompleteMessage" class="game-complete-message hidden">
+                        <h3>Congratulations! 🎉</h3>
+        // Register the service workered the game in <span id="finalMoves">0</span> moves and <span id="finalTime">0:00</span>!</p>
+        if ('serviceWorker' in navigator) { id="earnedPoints" class="earned-points">0</span> points!</p>
+            window.addEventListener('load', () => {lass="btn-primary"><i class="fas fa-play"></i> Play Again</button>
                 navigator.serviceWorker.register('/sw.js')
                     .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope); Dashboard</button>
                     })
                     .catch(error => {
                         console.log('ServiceWorker registration failed: ', error);
-                    });
-            });
-        }
+                    });ultiplication Adventure by Math Explorers | <span class="ai-badge"><i class="fas fa-brain"></i> AI Powered</span></p>
+            });r>
+        }>
     </script>
+    <!-- Scripts -->
     <!-- Load animation and utilities first -->
-    <script src="js/confetti.js"></script>
-    <script src="js/confetti-fix.js"></script>
-        
-    <!-- Load services and utilities first -->
-    <script src="js/multiplicationTables.js"></script>es.js"></script>
-    <script src="js/mathUtils.js"></script>script>
+    <script src="js/confetti.js"></script>zing scripts');
+    <script src="js/confetti-fix.js"></script>ction(e) {
+            console.log('Click detected on:', e.target);
+    <!-- Script to handle sound issues -->
+    <script>
+        // Fix for missing sound files - pre-initialize basic sounds
+        window.addEventListener('load', function() {
+            if (window.SoundManager && window.SoundFix) {
+                console.log("Automatically applying sound fixes");
+                try {then(registration => {
+                    window.SoundFix.createAllMemorySounds();ion successful with scope: ', registration.scope);
+                    })
+                    // Dismiss any sound alerts automatically
+                    setTimeout(function() {eWorker registration failed: ', error);
+                        if (window.SoundFix && window.SoundFix.dismissSoundAlerts) {
+                            window.SoundFix.dismissSoundAlerts();
+                        }
+                    }, 2000);
+                } catch (e) {
+                    console.error("Error applying sound fixes:", e);
+                }js/confetti.js"></script>
+            }rc="js/confetti-fix.js"></script>
+        });
+    </script>pt to handle sound issues -->
+    <script>
+    <!-- Sound system must be loaded early -->nitialize basic sounds
+    <script src="js/soundManager.js"></script>on() {
+    <script src="js/soundCheck.js"></script>w.SoundFix) {
+    <script src="js/createSounds.js"></script>lying sound fixes");
+                try {
+    <!-- Load services and utilities -->teAllMemorySounds();
+    <script src="js/multiplicationTables.js"></script>
+    <script src="js/mathUtils.js"></script>erts automatically
+                    setTimeout(function() {
+    <!-- Load application modules in correct order -->SoundFix.dismissSoundAlerts) {
+    <script src="js/core.js"></script>ndFix.dismissSoundAlerts();
+    <script src="js/ui.js"></script>
+    <script src="js/rewards.js"></script>
+    <script src="js/assessment.js"></script>
+    <script src="js/game.js"></script>or applying sound fixes:", e);
+    <script src="js/settings.js"></script>
+    <script src="js/practice.js"></script>
+    <script src="js/tableReference.js"></script>
+    <script src="js/flipCardGame.js"></script>
+    
+    <!-- Debug and fix utilities --> early -->
+    <script src="js/debug.js"></script>script>
+    <script src="js/practice-fix.js"></script>
+    <script src="js/card-display-fix.js"></script>
 
-    <!-- Load application modules in correct order --> order -->
+    <!-- PWA specific scripts -->- Load services and utilities -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html></body>    </script>        }            document.head.appendChild(androidStyles);            androidStyles.href = 'css/android-tablet.css';            androidStyles.rel = 'stylesheet';            const androidStyles = document.createElement('link');            // Add Android-specific stylesheet                        document.body.classList.add('android-tablet');            console.log('Android tablet detected');        if (isAndroid && isTablet) {                const isTablet = window.innerWidth >= 600 || window.innerHeight >= 600;        const isAndroid = /Android/i.test(navigator.userAgent);        // Detect Android tablet                }            });                }                    console.log('ServiceWorker registration failed:', err);                } catch (err) {                    console.log('ServiceWorker registered with scope:', registration.scope);                    const registration = await navigator.serviceWorker.register('./sw.js', { scope: './' });                try {            window.addEventListener('load', async () => {        if ('serviceWorker' in navigator) {        // Initialize PWA support    <script>    <script src="js/generateIcons.js"></script>    <script src="js/pwaInstall.js"></script>    <script src="js/multiplicationTables.js"></script>
+    <script src="js/mathUtils.js"></script>
+
+    <!-- Load application modules in correct order -->
     <script src="js/core.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/rewards.js"></script>
     <script src="js/assessment.js"></script>
     <script src="js/game.js"></script>
-    <script src="js/settings.js"></script><script src="js/settings.js"></script>
-    <script src="js/practice.js"></script>cript>
-    <script src="js/tableReference.js"></script>cript>
-    <script src="js/flipCardGame.js"></script><script src="js/flipCardGame.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/practice.js"></script>
+    <script src="js/tableReference.js"></script>
+    <script src="js/flipCardGame.js"></script>
     
-    <!-- Animation and utilities -->
-    <script src="js/confetti.js"></script>
-    
-    <!-- Debug and fix utilities -->ript src="js/card-display-fix.js"></script>
+    <!-- Debug and fix utilities -->
     <script src="js/debug.js"></script>
-
-
-
-
-</html></body>    <script src="js/card-display-fix.js"></script>    <script src="js/practice-fix.js"></script></html>
+    <script src="js/practice-fix.js"></script>
+    <script src="js/card-display-fix.js"></script>
+</body>
+</html>

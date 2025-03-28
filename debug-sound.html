@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Debug Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #4285f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+        .sound-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .status-good {
+            color: green;
+            font-weight: bold;
+        }
+        .status-bad {
+            color: red;
+            font-weight: bold;
+        }
+        #log {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sound Debug Tool</h1>
+        
+        <div class="card">
+            <h2>Sound Status</h2>
+            <div id="soundStatus">Checking...</div>
+            <button id="refreshStatus">Refresh Status</button>
+            <button id="fixSounds">Fix Sound Issues</button>
+        </div>
+        
+        <div class="card">
+            <h2>Test Sounds</h2>
+            <p>Click on any sound to test it:</p>
+            <div class="sound-grid" id="soundButtons">
+                <!-- Sound buttons will be added here -->
+            </div>
+            <button id="testAll">Test All Sounds</button>
+            <button id="enableSound">Enable Sound</button>
+        </div>
+        
+        <div class="card">
+            <h2>Create Test Sounds</h2>
+            <p>If sounds aren't working, try creating test sounds:</p>
+            <button id="createTestSounds">Create Test Sounds</button>
+            <p>This will generate basic sounds using the Web Audio API.</p>
+        </div>
+        
+        <div class="card">
+            <h2>Sound Paths</h2>
+            <p>Expected sound files:</p>
+            <ul id="soundPaths">
+                <!-- Sound paths will be added here -->
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>Debug Log</h2>
+            <div id="log"></div>
+            <button id="clearLog">Clear Log</button>
+            <button id="copyLog">Copy Log</button>
+        </div>
+        
+        <p><a href="index.html">Return to Game</a></p>
+    </div>
+    
+    <script>
+        // Override console.log to capture in our debug panel
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        const logElement = document.getElementById('log');
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            appendToLog('LOG', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            appendToLog('ERROR', ...args);
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            appendToLog('WARN', ...args);
+        };
+        
+        function appendToLog(type, ...args) {
+            const line = document.createElement('div');
+            line.style.borderBottom = '1px solid #eee';
+            line.style.padding = '3px 0';
+            
+            if (type === 'ERROR') {
+                line.style.color = 'red';
+            } else if (type === 'WARN') {
+                line.style.color = 'orange';
+            }
+            
+            try {
+                const content = args.map(arg => {
+                    if (typeof arg === 'object') {
+                        return JSON.stringify(arg);
+                    }
+                    return String(arg);
+                }).join(' ');
+                
+                line.textContent = `[${type}] ${content}`;
+                logElement.appendChild(line);
+                logElement.scrollTop = logElement.scrollHeight;
+            } catch (e) {
+                // Fallback if stringify fails
+                line.textContent = `[${type}] ${args.join(' ')}`;
+                logElement.appendChild(line);
+            }
+        }
+        
+        // Expected sound files
+        const expectedSounds = [
+            'sounds/click.mp3',
+            'sounds/complete.mp3',
+            'sounds/correct.mp3',
+            'sounds/error.mp3',
+            'sounds/incorrect.mp3',
+            'sounds/points.mp3',
+            'sounds/card-flip.mp3',
+            'sounds/match.mp3',
+            'sounds/mismatch.mp3',
+            'sounds/victory.mp3',
+            'sounds/background.mp3'
+        ];
+        
+        // Sound test functions
+        function checkSoundFiles() {
+            const soundStatus = document.getElementById('soundStatus');
+            soundStatus.innerHTML = 'Checking sound files...';
+            
+            let missingCount = 0;
+            let loadedCount = 0;
+            let html = '';
+            
+            // Check each file
+            Promise.all(expectedSounds.map(soundFile => {
+                return fetch(soundFile, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            loadedCount++;
+                            return `<li>${soundFile} - <span class="status-good">OK</span></li>`;
+                        } else {
+                            missingCount++;
+                            return `<li>${soundFile} - <span class="status-bad">NOT FOUND</span></li>`;
+                        }
+                    })
+                    .catch(() => {
+                        missingCount++;
+                        return `<li>${soundFile} - <span class="status-bad">ERROR</span></li>`;
+                    });
+            })).then(results => {
+                // Update sound paths list
+                document.getElementById('soundPaths').innerHTML = results.join('');
+                
+                // Update status
+                if (missingCount > 0) {
+                    soundStatus.innerHTML = `<span class="status-bad">Missing ${missingCount} sound files</span>`;
+                } else {
+                    soundStatus.innerHTML = `<span class="status-good">All sound files found (${loadedCount})</span>`;
+                }
+            });
+            
+            // Also check if SoundManager exists
+            if (window.SoundManager) {
+                html += `<p>SoundManager: <span class="status-good">FOUND</span></p>`;
+            } else {
+                html += `<p>SoundManager: <span class="status-bad">NOT FOUND</span></p>`;
+            }
+            
+            soundStatus.innerHTML += html;
+        }
+        
+        function createTestSoundButtons() {
+            const soundButtons = document.getElementById('soundButtons');
+            soundButtons.innerHTML = '';
+            
+            // Add a button for each expected sound
+            expectedSounds.forEach(soundFile => {
+                const button = document.createElement('button');
+                const soundName = soundFile.split('/').pop().split('.')[0];
+                button.textContent = soundName;
+                
+                button.addEventListener('click', () => {
+                    console.log(`Testing sound: ${soundName}`);
+                    
+                    // Try using SoundManager first
+                    if (window.SoundManager && typeof SoundManager.play === 'function') {
+                        SoundManager.play(soundName);
+                    } else {
+                        // Fall back to direct Audio
+                        try {
+                            const audio = new Audio(soundFile);
+                            audio.play().catch(err => console.error(`Error playing ${soundName}:`, err));
+                        } catch (error) {
+                            console.error(`Error creating Audio for ${soundName}:`, error);
+                        }
+                    }
+                });
+                
+                soundButtons.appendChild(button);
+            });
+        }
+        
+        function testAllSounds() {
+            console.log('Testing all sounds...');
+            
+            // If SoundManager is available, use its test function
+            if (window.SoundManager && typeof SoundManager.test === 'function') {
+                SoundManager.test();
+                return;
+            }
+            
+            // Otherwise do a simple sequential test
+            let index = 0;
+            
+            function playNextSound() {
+                if (index >= expectedSounds.length) {
+                    console.log('Sound test complete!');
+                    return;
+                }
+                
+                const soundFile = expectedSounds[index];
+                const soundName = soundFile.split('/').pop().split('.')[0];
+                console.log(`Testing sound ${index + 1}/${expectedSounds.length}: ${soundName}`);
+                
+                try {
+                    const audio = new Audio(soundFile);
+                    audio.onended = () => {
+                        index++;
+                        setTimeout(playNextSound, 500);
+                    };
+                    
+                    audio.onerror = () => {
+                        console.error(`Error loading sound: ${soundName}`);
+                        index++;
+                        setTimeout(playNextSound, 500);
+                    };
+                    
+                    audio.play().catch(error => {
+                        console.error(`Error playing sound: ${soundName}`, error);
+                        index++;
+                        setTimeout(playNextSound, 500);
+                    });
+                } catch (error) {
+                    console.error(`Error creating Audio for ${soundName}:`, error);
+                    index++;
+                    setTimeout(playNextSound, 500);
+                }
+            }
+            
+            playNextSound();
+        }
+        
+        function createTestSounds() {
+            console.log('Creating test sounds...');
+            
+            // Check if Web Audio API is supported
+            if (!window.AudioContext && !window.webkitAudioContext) {
+                console.error('Web Audio API not supported');
+                alert('Your browser does not support Web Audio API');
+                return;
+            }
+            
+            // Create audio context
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+            
+            // Generate sounds with frequency and duration
+            const testSounds = [
+                { name: 'click', freq: 880, duration: 150 },
+                { name: 'correct', freq: 1760, duration: 300 },
+                { name: 'incorrect', freq: 220, duration: 300 },
+                { name: 'complete', freq: [523, 659, 784], duration: 500 }
+            ];
+            
+            let completed = 0;
+            
+            testSounds.forEach(sound => {
+                createSound(audioCtx, sound).then(() => {
+                    completed++;
+                    if (completed === testSounds.length) {
+                        console.log('All test sounds created successfully');
+                    }
+                }).catch(error => {
+                    console.error(`Error creating ${sound.name} sound:`, error);
+                });
+            });
+        }
+        
+        function createSound(audioCtx, soundDef) {
+            return new Promise((resolve, reject) => {
+                try {
+                    // Create oscillator
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    
+                    oscillator.type = 'sine';
+                    
+                    // Handle multiple frequencies for chords or sequences
+                    if (Array.isArray(soundDef.freq)) {
+                        // Simple sequence for multiple frequencies
+                        soundDef.freq.forEach((freq, i) => {
+                            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime + (i * 0.2));
+                        });
+                    } else {
+                        oscillator.frequency.value = soundDef.freq;
+                    }
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    
+                    // Set up envelope
+                    const now = audioCtx.currentTime;
+                    const duration = soundDef.duration / 1000; // convert to seconds
+                    
+                    gainNode.gain.setValueAtTime(0, now);
+                    gainNode.gain.linearRampToValueAtTime(0.7, now + 0.01);
+                    gainNode.gain.setValueAtTime(0.7, now + duration - 0.05);
+                    gainNode.gain.linearRampToValueAtTime(0, now + duration);
+                    
+                    oscillator.start(now);
+                    oscillator.stop(now + duration);
+                    
+                    // Store in window for testing
+                    if (!window.testSounds) window.testSounds = {};
+                    window.testSounds[soundDef.name] = {
+                        play: function() {
+                            createSound(new AudioContext(), soundDef);
+                        }
+                    };
+                    
+                    console.log(`Created test sound: ${soundDef.name}`);
+                    
+                    // Wait for sound to complete
+                    setTimeout(resolve, soundDef.duration + 100);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+        
+        // Add event listeners
+        document.getElementById('refreshStatus').addEventListener('click', checkSoundFiles);
+        document.getElementById('testAll').addEventListener('click', testAllSounds);
+        document.getElementById('createTestSounds').addEventListener('click', createTestSounds);
+        document.getElementById('clearLog').addEventListener('click', () => {
+            document.getElementById('log').innerHTML = '';
+        });
+        document.getElementById('copyLog').addEventListener('click', () => {
+            const log = document.getElementById('log').textContent;
+            navigator.clipboard.writeText(log).then(() => {
+                alert('Log copied to clipboard!');
+            }).catch(err => {
+                console.error('Could not copy log:', err);
+            });
+        });
+        document.getElementById('enableSound').addEventListener('click', () => {
+            if (window.SoundManager) {
+                SoundManager.setSoundEnabled(true);
+                console.log('Sound enabled');
+            } else {
+                console.error('SoundManager not available');
+            }
+        });
+        document.getElementById('fixSounds').addEventListener('click', () => {
+            // Try to create test sounds
+            createTestSounds();
+            
+            // Try to initialize SoundManager
+            if (!window.SoundManager) {
+                console.error('SoundManager not found, creating minimal version');
+                
+                // Create minimal SoundManager
+                window.SoundManager = {
+                    play: function(soundId) {
+                        console.log(`Minimal SoundManager: Playing sound ${soundId}`);
+                        
+                        // Try to use test sounds if available
+                        if (window.testSounds && window.testSounds[soundId]) {
+                            window.testSounds[soundId].play();
+                            return;
+                        }
+                        
+                        // Try to play sound directly
+                        const soundMap = {
+                            'flip': 'click',
+                            'card-flip': 'click',
+                            'match': 'correct',
+                            'victory': 'complete',
+                            'mismatch': 'incorrect',
+                            'error': 'incorrect'
+                        };
+                        
+                        const mappedSound = soundMap[soundId] || soundId;
+                        
+                        // Try test sounds again with mapped name
+                        if (window.testSounds && window.testSounds[mappedSound]) {
+                            window.testSounds[mappedSound].play();
+                        } else {
+                            console.error(`No sound available for ${soundId}`);
+                        }
+                    },
+                    test: function() {
+                        console.log('Minimal SoundManager: Running test');
+                        if (window.testSounds) {
+                            for (const id in window.testSounds) {
+                                if (window.testSounds.hasOwnProperty(id)) {
+                                    setTimeout(() => {
+                                        console.log(`Testing sound: ${id}`);
+                                        window.testSounds[id].play();
+                                    }, 500);
+                                }
+                            }
+                        } else {
+                            console.error('No test sounds available');
+                        }
+                    },
+                    setSoundEnabled: function() { return true; },
+                    isSoundEnabled: function() { return true; }
+                };
+                
+                console.log('Created minimal SoundManager');
+            } else {
+                console.log('SoundManager found, reinitializing');
+                
+                // Try to reinitialize
+                if (typeof SoundManager.init === 'function') {
+                    SoundManager.init();
+                }
+            }
+            
+            // Update status
+            checkSoundFiles();
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            checkSoundFiles();
+            createTestSoundButtons();
+        });
+    </script>
+</body>
+</html>

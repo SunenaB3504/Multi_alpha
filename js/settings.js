@@ -87,6 +87,11 @@ const Settings = (function() {
         
         // Apply timer duration
         MathUtils.setTimerDuration(currentSettings.timerDuration);
+        
+        // Apply sound settings
+        if (window.SoundManager && typeof SoundManager.setSoundEnabled === 'function') {
+            SoundManager.setSoundEnabled(currentSettings.soundEnabled);
+        }
     }
     
     /**
@@ -137,6 +142,10 @@ const Settings = (function() {
      * @return {boolean} Whether sound is enabled
      */
     function isSoundEnabled() {
+        // Use SoundManager if available, otherwise fall back to settings
+        if (window.SoundManager && typeof SoundManager.isSoundEnabled === 'function') {
+            return SoundManager.isSoundEnabled();
+        }
         return currentSettings.soundEnabled;
     }
     

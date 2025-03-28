@@ -184,6 +184,16 @@ const Game = (function() {
             
             // DIRECT APPROACH: Create and show dancing dog animation right in the Flash Cards section
             showDancingDogInFlashCards();
+            
+            // Play correct sound
+            if (window.SoundManager) {
+                SoundManager.play('correct');
+            }
+        } else {
+            // Play incorrect sound
+            if (window.SoundManager) {
+                SoundManager.play('incorrect');
+            }
         }
         
         // Increment problem count
@@ -312,6 +322,11 @@ const Game = (function() {
             `Time's up! The answer is ${currentProblem.answer}.`, 
             false
         );
+        
+        // Play error sound
+        if (window.SoundManager) {
+            SoundManager.play('error');
+        }
         
         // Disable input
         const input = document.getElementById('gameInput');
