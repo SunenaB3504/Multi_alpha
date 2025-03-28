@@ -7,7 +7,8 @@ const Settings = (function() {
     const defaultSettings = {
         highContrast: false,
         textSize: 'medium',
-        timerDuration: 15
+        timerDuration: 15,
+        soundEnabled: true
     };
     
     // Current settings
@@ -56,6 +57,15 @@ const Settings = (function() {
             currentSettings.timerDuration = parseInt(timerDurationSelect.value);
             MathUtils.setTimerDuration(currentSettings.timerDuration);
         });
+        
+        // Sound toggle
+        const soundToggle = document.getElementById('soundEnabled');
+        if (soundToggle) {
+            soundToggle.checked = currentSettings.soundEnabled;
+            soundToggle.addEventListener('change', () => {
+                currentSettings.soundEnabled = soundToggle.checked;
+            });
+        }
         
         // Save button
         const saveButton = document.getElementById('saveSettings');
@@ -122,11 +132,20 @@ const Settings = (function() {
         return { ...currentSettings };
     }
     
+    /**
+     * Get sound setting
+     * @return {boolean} Whether sound is enabled
+     */
+    function isSoundEnabled() {
+        return currentSettings.soundEnabled;
+    }
+    
     // Public API
     return {
         init,
         getSettings,
-        saveSettings
+        saveSettings,
+        isSoundEnabled
     };
 })();
 

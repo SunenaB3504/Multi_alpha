@@ -568,6 +568,7 @@ input:checked + .slider:before {
     margin-bottom: 20px;
 }
 
+/* Table buttons in custom practice */
 .table-btn {
     padding: 15px 10px;
     border: 2px solid var(--primary-color);
@@ -582,16 +583,17 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    -webkit-tap-highlight-color: rgba(138, 43, 226, 0.5); /* Brighter tap highlight */
     user-select: none; /* Prevent text selection */
     touch-action: manipulation; /* Improve touch handling */
     position: relative;
     overflow: hidden;
+    z-index: 1; /* Ensure the button is above other elements */
 }
 
-.table-btn:hover {
+.table-btn:hover, .table-btn:focus {
     background-color: rgba(138, 43, 226, 0.1);
     transform: translateY(-2px);
+    outline: none;
 }
 
 .table-btn:active {
@@ -600,8 +602,34 @@ input:checked + .slider:before {
     background-color: rgba(138, 43, 226, 0.2);
 }
 
+.table-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    z-index: -1;
+    transition: background-color 0.3s;
+}
+
+.table-btn:hover::before {
+    background-color: rgba(138, 43, 226, 0.05);
+}
+
+.table-btn.interactive {
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0% { border-color: var(--primary-color); }
+    50% { border-color: var(--accent-color); }
+    100% { border-color: var(--primary-color); }
+}
+
 .table-btn.selected {
-    background-color: var(--primary-color);
+    background-color: #4285f4;
     color: white;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.5); /* Add prominent outline */
@@ -633,6 +661,202 @@ input:checked + .slider:before {
 
 .custom-practice-area.hidden:not([style*="display: block"]) {
     display: none;
+}
+
+/* Practice mode selector - enhanced styling */
+.practice-mode-selector {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mode-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.mode-toggle {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.mode-btn {
+    padding: 12px 20px;
+    background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+    border: 2px solid #d0d0d0;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 130px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.mode-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.7s ease;
+}
+
+.mode-btn:hover::before {
+    left: 100%;
+}
+
+.mode-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.mode-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.mode-btn.active {
+    background: linear-gradient(to bottom, #4285f4, #3367d6);
+    color: white;
+    border-color: #2a56c6;
+    box-shadow: 0 2px 10px rgba(66,133,244,0.4);
+}
+
+/* Standard mode button specific styling */
+#standardModeBtn::after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f15c"; /* document icon */
+    font-weight: 900;
+    margin-left: 8px;
+}
+
+/* Matching mode button specific styling */
+#matchingModeBtn::after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f24d"; /* clone icon */
+    font-weight: 900;
+    margin-left: 8px;
+}
+
+/* Start Practice button - enhanced styling */
+#generatePractice {
+    padding: 15px 30px;
+    background: linear-gradient(to bottom, var(--accent-color), #e67e00);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255,140,0,0.3);
+    display: block;
+    margin: 25px auto 10px;
+    width: 80%;
+    max-width: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+#generatePractice:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 18px rgba(255,140,0,0.4);
+    background: linear-gradient(to bottom, #ffaa33, var(--accent-color));
+}
+
+#generatePractice:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(255,140,0,0.3);
+}
+
+#generatePractice::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+#generatePractice:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#generatePractice i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Practice mode selector */
+.practice-mode-selector {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mode-label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.mode-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+.mode-btn {
+    padding: 8px 15px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-btn.active {
+    background-color: #4285f4;
+    color: white;
+}
+
+/* Custom matching area adjustments */
+.custom-matching-area {
+    margin-top: 15px;
+}
+
+.custom-matching-area .game-stats {
+    margin-bottom: 15px;
+}
+
+.custom-matching-area .flip-card-grid {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* Table reference styles */
@@ -738,640 +962,34 @@ input:checked + .slider:before {
     }
 }
 
-/* Add these styles to your existing CSS file */
-
-.celebration-fallback {
-    display: none;
-    text-align: center;
-    margin: 20px 0;
-}
-
-.correct-gif-container.hidden {
-    display: none;
-}
-
-.celebration-star {
-    color: gold;
-    font-size: 30px;
-    margin: 0 10px;
-    animation: twinkle 1.5s infinite alternate;
-}
-
-.celebration-star:nth-child(2) {
-    animation-delay: 0.3s;
-}
-
-.celebration-star:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes twinkle {
-    0% { transform: scale(1); opacity: 0.7; }
-    100% { transform: scale(1.3); opacity: 1; }
-}
-
-.fallback-gif {
-    max-width: 200px;
-    margin: 0 auto;
-    display: block;
-}
-
-/* Enhanced animation styling */
-.correct-gif-container {
-    text-align: center;
-    padding: 15px;
-    border-radius: var(--border-radius);
-    transition: all 0.3s ease;
-    max-height: 200px;
-    overflow: hidden;
-}
-
-.correct-gif-container.hidden {
-    display: none;
-    max-height: 0;
-    padding: 0;
-}
-
-.correct-gif-container.testing {
-    border: 3px solid gold;
-    background-color: rgba(255, 215, 0, 0.1);
-}
-
-#correctGif {
-    max-width: 100%;
-    max-height: 180px;
-    border-radius: 8px;
-}
-
-/* Completely revised animation styling to fix visibility issues */
-.correct-gif-container {
-    text-align: center;
-    margin: 20px 0;
-    padding: 15px;
-    border-radius: var(--border-radius);
-    max-height: 250px;
-    z-index: 100;
-    position: relative;
-    border: 3px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.correct-gif-container.hidden {
-    display: none !important;
-}
-
-#correctGif {
-    max-width: 100%;
-    max-height: 180px;
-    border-radius: 8px;
-    display: block;
-    margin: 0 auto;
-}
-
-.celebration-fallback {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px 0;
-    min-height: 60px;
-}
-
-.celebration-star {
-    color: gold;
-    font-size: 36px;
-    margin: 0 10px;
-    display: inline-block;
-    animation: twinkle 1.5s infinite alternate;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
-}
-
-@keyframes twinkle {
-    0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
-    50% { transform: scale(1.3) rotate(10deg); opacity: 1; }
-    100% { transform: scale(1) rotate(-10deg); opacity: 0.9; }
-}
-
-/* Animation test button styling */
-.animation-test-btn {
-    margin-top: 15px;
-    background-color: #e91e63 !important;
-}
-
-/* Add these rules to ensure the animation container is visible */
-
-/* Ensure animation container stands out */
-.correct-gif-container {
-    display: block !important;
-    text-align: center;
-    margin: 20px auto;
-    padding: 15px;
-    border-radius: var(--border-radius);
-    max-width: 300px;
-    z-index: 1000;
-    position: relative;
-}
-
-/* Only hide it when it has the hidden class AND is not being shown */
-.correct-gif-container.hidden:not([style*="display: block"]) {
-    display: none !important;
-}
-
-/* Make celebration stars always visible */
-.celebration-star {
-    color: gold;
-    font-size: 36px;
-    margin: 0 10px;
-    display: inline-block !important;
-    animation: twinkle 1.5s infinite alternate;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
-}
-
-/* Test animation button should always be visible */
-.animation-test-btn {
-    display: block !important;
-    margin: 15px auto !important;
-    background-color: #e91e63 !important;
-    color: white !important;
-    padding: 10px 20px !important;
-    font-size: 1rem !important;
-    border-radius: 8px !important;
-    border: none !important;
-    cursor: pointer !important;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
-}
-
-/* Make sure practice area is visible when needed */
-.custom-practice-area {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #eaeaea;
-    border-radius: var(--border-radius);
-}
-
-.custom-practice-area.hidden:not([style*="display: block"]) {
-    display: none;
-}
-
-/* Puppy animation specific styles */
-#correctGif {
-    max-width: 200px;
-    max-height: 200px;
-    border-radius: 8px;
-    display: block;
-    margin: 0 auto;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.celebration-fallback .fa-dog {
-    color: #8B4513; /* Brown color for dog icons */
-    font-size: 36px;
-}
-
-.celebration-fallback .fa-bone {
-    color: #D2B48C; /* Tan color for bone icon */
-    font-size: 30px;
-    animation-delay: 0.3s;
-}
-
-/* Add a puppy-themed background for the container */
-.correct-gif-container {
-    background-color: rgba(254, 235, 200, 0.3) !important; /* Light warm background */
-    border: 3px solid #FFA500 !important; /* Orange border */
-}
-
-/* Dog animation specific styles */
-#correctGif {
-    max-width: 220px;
-    max-height: 220px;
-    border-radius: 8px;
-    display: block;
-    margin: 0 auto;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.celebration-fallback .fa-dog {
-    color: #8B4513; /* Brown color for dog icons */
-    font-size: 36px;
-    animation: bounce 1s infinite alternate;
-}
-
-.celebration-fallback .fa-bone {
-    color: #D2B48C; /* Tan color for bone icon */
-    font-size: 30px;
-    animation-delay: 0.3s;
-    animation: rotate 1.5s infinite linear;
-}
-
-/* Add dance animations for fallback icons */
-@keyframes bounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-15px); }
-}
-
-@keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Add a dog-themed background for the container */
-.correct-gif-container {
-    background-color: rgba(245, 245, 220, 0.4) !important; /* Beige background */
-    border: 3px solid #8B4513 !important; /* Brown border */
-}
-
-/* Super visible animation container to ensure it's seen */
-.correct-gif-container {
-    display: block !important;
-    visibility: visible !important;
-    text-align: center !important;
-    margin: 20px auto !important;
-    padding: 20px !important;
-    border-radius: 12px !important;
-    max-width: 300px !important;
-    z-index: 10000 !important;
-    position: relative !important;
-    background-color: rgba(245, 245, 220, 0.9) !important; 
-    border: 5px solid #8B4513 !important;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3) !important;
-}
-
-/* Only hide it when explicitly hidden */
-.correct-gif-container.hidden {
-    display: none !important;
-    visibility: hidden !important;
-}
-
-/* Super visible animation */
-#correctGif {
-    display: block !important;
-    max-width: 240px !important;
-    max-height: 240px !important;
-    margin: 0 auto !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
-}
-
-/* Game-specific dancing dog animation */
-.game-celebration-container {
-    display: block !important;
-    visibility: visible !important;
-    background-color: rgba(245, 245, 220, 0.9) !important;
-    border: 5px solid #8B4513 !important;
-    border-radius: 12px !important;
-    padding: 15px !important;
-    margin: 15px auto !important;
-    max-width: 280px !important;
-    text-align: center !important;
-    z-index: 9999 !important;
-    position: relative !important;
-    animation: pop-in 0.5s ease-out !important;
-}
-
-@keyframes pop-in {
-    0% { transform: scale(0.5); opacity: 0; }
-    70% { transform: scale(1.1); }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Make sure dog icons have animation */
-.game-celebration-container .fa-dog {
-    animation: bounce 1s infinite alternate !important;
-}
-
-.game-celebration-container .fa-bone {
-    animation: rotate 1.5s infinite linear !important;
-}
-
-/* Custom practice-specific dog animation */
-.practice-celebration-container {
-    display: block !important;
-    visibility: visible !important;
-    background-color: rgba(245, 245, 220, 0.9) !important;
-    border: 5px solid #8B4513 !important;
-    border-radius: 12px !important;
-    padding: 15px !important;
-    margin: 15px auto !important;
-    max-width: 280px !important;
-    text-align: center !important;
-    z-index: 9999 !important;
-    position: relative !important;
-    animation: bounce-in 0.6s ease-out !important;
-}
-
-@keyframes bounce-in {
-    0% { transform: scale(0.3); opacity: 0; }
-    50% { transform: scale(1.05); }
-    70% { transform: scale(0.95); }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Dark mode specific styles */
-body.dark-mode .instruction {
-    color: var(--instruction-color, #e0e0e0) !important;
-}
-
-body.dark-mode .table-btn {
-    color: var(--table-btn-text, #ffffff);
-    border-color: var(--table-btn-border, #7c4dff);
-    background-color: #2d2d2d;
-}
-
-body.dark-mode .table-btn:hover {
-    background-color: rgba(138, 43, 226, 0.3);
-}
-
-body.dark-mode .table-btn.selected {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: #ffffff;
-}
-
-body.dark-mode .table-btn.selected::after {
-    background-color: #fafafa;
-    color: var(--primary-color);
-}
-
-/* Assessment-specific dancing dog animation */
-.assessment-celebration-container {
-    display: block !important;
-    visibility: visible !important;
-    background-color: rgba(245, 245, 220, 0.9) !important;
-    border: 5px solid #8B4513 !important;
-    border-radius: 12px !important;
-    padding: 15px !important;
-    margin: 15px auto !important;
-    max-width: 280px !important;
-    text-align: center !important;
-    z-index: 9999 !important;
-    position: relative !important;
-    animation: slide-in 0.5s ease-out !important;
-}
-
-@keyframes slide-in {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-}
-
-/* Animation for assessment celebration icons */
-.assessment-celebration-container .fa-dog {
-    animation: bounce 1s infinite alternate !important;
-}
-
-.assessment-celebration-container .fa-bone {
-    animation: rotate 1.5s infinite linear !important;
-}
-
-/* Reward notification styles */
-.reward-notification {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.reward-notification.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.reward-notification-content {
-    background-color: var(--card-color);
-    border-radius: var(--border-radius);
-    padding: 30px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    max-width: 300px;
-    animation: pop-up 0.5s ease-out;
-}
-
-.reward-notification i {
-    font-size: 3rem;
-    margin-bottom: 15px;
-}
-
-.reward-notification h3 {
-    margin: 0 0 10px 0;
-    color: var(--primary-color);
-}
-
-.reward-description {
-    color: var(--light-text);
-    margin-bottom: 20px;
-}
-
-/* Reward modal styles */
-.reward-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.reward-modal.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.reward-modal-content {
-    background-color: var(--card-color);
-    border-radius: var(--border-radius);
-    padding: 30px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    max-width: 300px;
-    animation: pop-up 0.5s ease-out;
-}
-
-@keyframes pop-up {
-    0% { transform: scale(0.8); opacity: 0; }
-    70% { transform: scale(1.05); }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Enhanced reward item styles */
-.reward-item {
-    background-color: var(--card-color);
-    border-radius: var(--border-radius);
-    padding: 15px;
-    text-align: center;
-    transition: var(--transition);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.reward-item.earned {
-    border: 2px solid var(--accent-color);
-    box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
-}
-
-.reward-item.locked {
-    opacity: 0.7;
-    filter: grayscale(0.8);
-    cursor: not-allowed;
-}
-
-.reward-item.earned:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
-}
-
-.reward-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
-
-.reward-name {
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: var(--text-color);
-}
-
-.reward-cost {
-    font-size: 0.8rem;
-    color: var(--light-text);
-    margin-bottom: 5px;
-}
-
-.reward-status {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    background-color: rgba(138, 43, 226, 0.1);
-    padding: 3px 8px;
+/* Game completion message */
+.game-complete-message {
+    background-color: #f8f9fa;
+    border: 2px solid #4caf50;
     border-radius: 10px;
-    display: inline-block;
-}
-
-.reward-item.earned .reward-status {
-    background-color: rgba(76, 175, 80, 0.2);
-    color: #4caf50;
-}
-
-/* Enhanced reward modal styles */
-.reward-modal-content {
-    background-color: var(--card-color);
-    border-radius: var(--border-radius);
-    padding: 30px;
+    padding: 20px;
     text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    max-width: 320px;
-    animation: pop-up 0.5s ease-out;
-}
-
-.reward-points {
-    font-weight: bold;
-    color: var(--primary-color);
-    margin: 10px 0;
-    font-size: 1.1rem;
-}
-
-.reward-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     margin-top: 20px;
+    position: relative; /* This is important for the confetti positioning */
+    overflow: hidden;   /* This keeps the confetti inside the box */
+    min-height: 180px;
+    z-index: 1;  /* Ensure message is above other content */
 }
 
-.reward-claim-instructions {
-    font-style: italic;
-    margin: 15px 0;
-    padding: 10px;
-    background-color: rgba(255, 235, 59, 0.2);
-    border-radius: 5px;
+.game-complete-message h3 {
+    color: #4caf50;
+    margin-top: 0;
+    font-size: 1.5rem;
 }
 
-.confirmation-message {
-    text-align: center;
-}
-
-.confirmation-message h3 {
-    color: #4CAF50;
-    margin: 10px 0;
-}
-
-/* Claim button on reward items */
-.btn-claim {
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    margin-top: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: var(--transition);
-}
-
-.btn-claim:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-/* Claimed reward styling */
-.reward-item.claimed .reward-icon {
-    position: relative;
-}
-
-.reward-item.claimed .reward-icon::after {
-    content: "✓";
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #4CAF50;
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
+.earned-points {
+    font-size: 1.5rem;
+    color: #ff9800;
     font-weight: bold;
 }
 
-.reward-item.claimed .reward-status {
-    background-color: rgba(76, 175, 80, 0.2);
-    color: #4CAF50;
-}
-
-/* Dashboard reward icons display */
-.rewards-icons {
-    display: flex !important;
-    align-items: center;
-    gap: 5px;
-    flex-wrap: wrap;
-    max-width: 100%;
-    overflow: hidden;
-}
-
-.rewards-icons i {
-    font-size: 1.2rem;
-    animation: pulse 1.5s infinite alternate;
-    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.1); }
+/* Confetti canvas container */
+.confetti-canvas {
+    pointer-events: none;
+    z-index: 10;  /* Make sure confetti is on top */
 }

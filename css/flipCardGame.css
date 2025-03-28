@@ -1,0 +1,325 @@
+/* 
+ * Flip Card Game Styles for Multiplication Adventure
+ */
+
+/* Game container */
+#flipCardGame .card {
+    padding: 15px;
+}
+
+/* Game controls */
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+/* Level buttons - enhanced styling */
+.flip-game-level-btn {
+    padding: 10px 18px;
+    margin-right: 10px;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    min-width: 100px;
+}
+
+/* Easy button - green theme */
+.flip-game-level-btn[data-level="easy"] {
+    background: linear-gradient(to right, #43c6ac, #1ed085);
+    color: white;
+}
+
+/* Medium button - blue theme */
+.flip-game-level-btn[data-level="medium"] {
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: white;
+}
+
+/* Hard button - purple theme */
+.flip-game-level-btn[data-level="hard"] {
+    background: linear-gradient(to right, #8e2de2, #4a00e0);
+    color: white;
+}
+
+.flip-game-level-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.flip-game-level-btn:active {
+    transform: translateY(1px);
+}
+
+.flip-game-level-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.2);
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    border-radius: 25px;
+}
+
+.flip-game-level-btn:hover::before {
+    transform: scale(1);
+}
+
+.flip-game-level-btn.active {
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+    font-weight: 700;
+}
+
+.flip-game-level-btn.active::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    background-color: white;
+    color: inherit;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add icons to level buttons */
+.flip-game-level-btn[data-level="easy"]::before {
+    content: '🌱';
+    font-size: 1rem;
+    left: 15px;
+    background: none;
+    opacity: 0.9;
+}
+
+.flip-game-level-btn[data-level="medium"]::before {
+    content: '🌟';
+    font-size: 1rem;
+    left: 15px;
+    background: none;
+    opacity: 0.9;
+}
+
+.flip-game-level-btn[data-level="hard"]::before {
+    content: '🔥';
+    font-size: 1rem;
+    left: 15px;
+    background: none;
+    opacity: 0.9;
+}
+
+/* Adjust padding to accommodate icons */
+.flip-game-level-btn {
+    padding-left: 35px;
+}
+
+/* Game stats display */
+.game-stats {
+    display: flex;
+    gap: 15px;
+}
+
+.stat-item {
+    background-color: #f5f5f5;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.stat-label {
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+/* Card grid layout */
+.flip-card-grid {
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    max-width: 900px; /* Increased from 800px to accommodate more cards */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grid-3x4 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.grid-4x4 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+/* New grid layout for 20 cards (10 pairs) - adjusted to be more visible */
+.grid-4x5 {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px; /* Tighter gap for more cards */
+}
+
+.grid-4x6 {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+/* Card styles */
+.flip-card {
+    width: 100%;
+    height: 90px; /* Slightly reduced from 100px to fit more cards */
+    perspective: 1000px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.flip-card:hover {
+    transform: translateY(-2px);
+}
+
+.flip-card:active {
+    transform: translateY(1px);
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.flip-card-front {
+    background-color: #5b8def;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    transform: rotateY(0deg);  /* This was missing - front card should not be rotated */
+}
+
+.flip-card-back {
+    background-color: #ffffff;
+    color: #333;
+    transform: rotateY(180deg);
+    border: 2px solid #e0e0e0;
+}
+
+.product-card {
+    background-color: #ffeb3b;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.expression-card {
+    background-color: #4caf50;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.flip-card.matched .flip-card-inner {
+    box-shadow: 0 0 8px 2px #4caf50;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.card-symbol {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.card-content {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Game completion message */
+.game-complete-message {
+    background-color: #f8f9fa;
+    border: 2px solid #4caf50;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.game-complete-message h3 {
+    color: #4caf50;
+    margin-top: 0;
+}
+
+.earned-points {
+    font-size: 1.5rem;
+    color: #ff9800;
+    font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .flip-card-grid {
+        gap: 8px;
+    }
+    
+    .flip-card {
+        height: 80px;
+    }
+    
+    .card-content, .card-symbol {
+        font-size: 1.2rem;
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .game-stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .grid-4x5 {
+        grid-template-columns: repeat(4, 1fr); /* Fall back to 4 columns on smaller screens */
+        grid-template-rows: repeat(5, 1fr);
+    }
+}

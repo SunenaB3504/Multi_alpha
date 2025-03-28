@@ -39,6 +39,15 @@ const UI = (function() {
         } else {
             console.error(`Section with ID ${sectionId} not found`);
         }
+        
+        // Additional initialization for specific sections
+        if (sectionId === 'wordGenerator' && window.Practice) {
+            // Re-initialize table buttons when showing the practice section
+            if (typeof Practice.setupTableButtons === 'function') {
+                setTimeout(Practice.setupTableButtons, 100);
+                console.log('Re-initializing table buttons for custom practice');
+            }
+        }
     }
     
     /**
@@ -46,9 +55,16 @@ const UI = (function() {
      * @param {Element} section - The section element
      */
     function updateSectionPoints(section) {
-        const pointsDisplay = section.querySelector('.points-value');
-        if (pointsDisplay) {
-            pointsDisplay.textContent = AppCore.getState().points;
+        try {
+            const pointsDisplay = section.querySelector('.points-value');
+            if (pointsDisplay) {
+                const points = window.AppCore && typeof AppCore.getState === 'function' 
+                    ? AppCore.getState().points
+                    : (window.Core && typeof Core.getPoints === 'function' ? Core.getPoints() : 0);
+                pointsDisplay.textContent = points || 0;
+            }
+        } catch (error) {
+            console.error('Error updating section points:', error);
         }
     }
     
