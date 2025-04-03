@@ -2,10 +2,10 @@
   "name": "Multiplication Adventure",
   "short_name": "MultiAdv",
   "description": "A fun way to learn multiplication tables",
-  "start_url": "./index.html",
+  "start_url": "/index.html",
   "scope": ".",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#4285f4",
   "categories": ["education", "kids", "math", "games"],
@@ -21,12 +21,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "images/maskable-icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ],
   "screenshots": [
