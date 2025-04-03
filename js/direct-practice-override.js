@@ -21,6 +21,8 @@
         setupModeButtons();
         setupStartPracticeButton();
         setupSubmitAndNextButtons();
+        setupPracticeAgainButton();
+        setupBackButton();
         
         console.log('✅ Direct practice override initialized successfully');
     }
@@ -30,6 +32,12 @@
             console.log('Setting up table buttons');
             const tableButtons = document.querySelectorAll('.table-btn');
             
+            // First, activate the first table button by default
+            if (tableButtons.length > 0) {
+                tableButtons[0].classList.add('active');
+                console.log(`Table ${tableButtons[0].getAttribute('data-table')} activated by default`);
+            }
+            
             tableButtons.forEach(btn => {
                 // Remove existing listeners
                 const newBtn = btn.cloneNode(true);
@@ -37,10 +45,23 @@
                     btn.parentNode.replaceChild(newBtn, btn);
                 }
                 
-                // Add new click handler
+                // Add new click handler with immediate visual feedback
                 newBtn.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Toggle active class with visual feedback
                     this.classList.toggle('active');
+                    
+                    // Add a brief highlight effect
+                    this.style.transition = 'background-color 0.3s';
+                    const originalBackground = this.style.backgroundColor;
+                    this.style.backgroundColor = this.classList.contains('active') ? '#4CAF50' : '#ff6b6b';
+                    
+                    setTimeout(() => {
+                        this.style.backgroundColor = originalBackground;
+                    }, 300);
+                    
                     console.log(`Table ${this.getAttribute('data-table')} toggled:`, this.classList.contains('active'));
                 });
             });
@@ -109,9 +130,13 @@
                     e.preventDefault();
                     console.log('⭐ Start Practice button clicked');
                     
+                    // Force requery active tables
+                    const activeTableButtons = document.querySelectorAll('.table-btn.active');
+                    console.log('Found active table buttons:', activeTableButtons.length);
+                    
                     // Get selected tables
                     const selectedTables = [];
-                    document.querySelectorAll('.table-btn.active').forEach(btn => {
+                    activeTableButtons.forEach(btn => {
                         selectedTables.push(parseInt(btn.getAttribute('data-table')));
                     });
                     
@@ -120,6 +145,13 @@
                     // Validate selection
                     if (selectedTables.length === 0) {
                         alert('Please select at least one multiplication table to practice.');
+                        // Auto-select the first table as fallback
+                        const firstTable = document.querySelector('.table-btn');
+                        if (firstTable) {
+                            firstTable.classList.add('active');
+                            selectedTables.push(parseInt(firstTable.getAttribute('data-table')));
+                            console.log('Auto-selected first table:', selectedTables);
+                        }
                         return;
                     }
                     
@@ -127,9 +159,15 @@
                     const isMatchingMode = document.getElementById('matchingModeBtn').classList.contains('active');
                     console.log('Is matching mode:', isMatchingMode);
                     
-                    // Get practice areas
+                    // Get relevant elements
+                    const customTables = document.querySelector('.custom-tables');
                     const customPracticeArea = document.querySelector('.custom-practice-area');
                     const customMatchingArea = document.querySelector('.custom-matching-area');
+                    
+                    // Hide tables selection first
+                    if (customTables) {
+                        customTables.classList.add('hidden');
+                    }
                     
                     if (isMatchingMode) {
                         startMatchingMode(selectedTables, customPracticeArea, customMatchingArea);
@@ -194,15 +232,21 @@
         try {
             console.log('Starting standard practice mode');
             
-            // Show standard practice area, hide matching area
-            if (customPracticeArea && customMatchingArea) {
-                customMatchingArea.classList.add('hidden');
-                customPracticeArea.classList.remove('hidden');
+            // First hide both practice areas
+            if (customMatchingArea) customMatchingArea.classList.add('hidden');
+            if (customPracticeArea) customPracticeArea.classList.add('hidden');
+            
+            // Then show only the standard practice area
+            if (customPracticeArea) {
+                // Small delay to ensure DOM updates properly
+                setTimeout(() => {
+                    customPracticeArea.classList.remove('hidden');
+                    console.log('Standard practice area now visible');
+                    
+                    // Generate first problem
+                    createCustomProblem(selectedTables);
+                }, 50);
             }
-            
-            // Generate first problem
-            createCustomProblem(selectedTables);
-            
         } catch (error) {
             console.error('Error starting standard mode:', error);
             alert('There was an error starting practice mode. Please try again.');
@@ -213,22 +257,29 @@
         try {
             console.log('Starting matching practice mode');
             
-            // Show matching area, hide standard practice area
-            if (customPracticeArea && customMatchingArea) {
-                customPracticeArea.classList.add('hidden');
-                customMatchingArea.classList.remove('hidden');
-            }
+            // First hide both practice areas
+            if (customPracticeArea) customPracticeArea.classList.add('hidden');
+            if (customMatchingArea) customMatchingArea.classList.add('hidden');
             
-            // Create matching cards
-            const customFlipCardGrid = document.getElementById('customFlipCardGrid');
-            if (customFlipCardGrid) {
-                const cardHTML = createMatchingCards(selectedTables);
-                customFlipCardGrid.innerHTML = cardHTML;
-                
-                // Setup card flip functionality
-                setupCardFlips(customFlipCardGrid);
+            // Then show only the matching area
+            if (customMatchingArea) {
+                // Small delay to ensure DOM updates properly
+                setTimeout(() => {
+                    customMatchingArea.classList.remove('hidden');
+                    console.log('Matching practice area now visible');
+                    
+                    // Create matching cards
+                    const customFlipCardGrid = document.getElementById('customFlipCardGrid');
+                    if (customFlipCardGrid) {
+                        customFlipCardGrid.innerHTML = ''; // Clear any existing cards
+                        const cardHTML = createMatchingCards(selectedTables);
+                        customFlipCardGrid.innerHTML = cardHTML;
+                        
+                        // Setup card flip functionality
+                        setupCardFlips(customFlipCardGrid);
+                    }
+                }, 50);
             }
-            
         } catch (error) {
             console.error('Error starting matching mode:', error);
             alert('There was an error starting matching mode. Please try again.');
@@ -502,6 +553,49 @@
             console.log('Card flips setup complete');
         } catch (error) {
             console.error('Error setting up card flips:', error);
+        }
+    }
+    
+    function setupPracticeAgainButton() {
+        const practiceAgainBtn = document.getElementById('practiceAgainBtn');
+        if (practiceAgainBtn) {
+            practiceAgainBtn.addEventListener('click', function() {
+                const customGameCompleteMessage = document.getElementById('customGameCompleteMessage');
+                if (customGameCompleteMessage) {
+                    customGameCompleteMessage.classList.add('hidden');
+                }
+                
+                // Get all relevant elements
+                const customTables = document.querySelector('.custom-tables');
+                const customPracticeArea = document.querySelector('.custom-practice-area');
+                const customMatchingArea = document.querySelector('.custom-matching-area');
+                
+                // Hide practice areas
+                if (customPracticeArea) customPracticeArea.classList.add('hidden');
+                if (customMatchingArea) customMatchingArea.classList.add('hidden');
+                
+                // Show tables selection
+                if (customTables) customTables.classList.remove('hidden');
+            });
+        }
+    }
+    
+    function setupBackButton() {
+        const backBtn = document.querySelector('#wordGenerator .btn-back');
+        if (backBtn) {
+            backBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get custom tables
+                const customTables = document.querySelector('.custom-tables');
+                const customPracticeArea = document.querySelector('.custom-practice-area');
+                const customMatchingArea = document.querySelector('.custom-matching-area');
+                
+                // Make sure tables are visible when going back
+                if (customTables) customTables.classList.remove('hidden');
+                if (customPracticeArea) customPracticeArea.classList.add('hidden');
+                if (customMatchingArea) customMatchingArea.classList.add('hidden');
+            });
         }
     }
 })();

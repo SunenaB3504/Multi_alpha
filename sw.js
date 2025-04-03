@@ -65,7 +65,7 @@ self.addEventListener('activate', event => {
 
 // Fetch event - serve from cache if available, otherwise fetch from network
 self.addEventListener('fetch', event => {
-  // Skip non-GET requests
+  // Skip non-GET requests or HEAD requests
   if (event.request.method !== 'GET') return;
   
   event.respondWith(
@@ -79,17 +79,29 @@ self.addEventListener('fetch', event => {
         // Otherwise fetch from network
         return fetch(event.request)
           .then(networkResponse => {
-            // Don't cache responses from external domains
-            if (!event.request.url.startsWith(self.location.origin)) {
+            // Don't cache responses from external domains or HEAD requests
+            if (!event.request.url.startsWith(self.location.origin) || 
+                networkResponse.type === 'opaque' || 
+                event.request.method === 'HEAD') {
               return networkResponse;
             }
             
-            // Cache the response for future requests
-            let responseCopy = networkResponse.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseCopy);
-              });
+            // Only cache successful responses
+            if (!networkResponse || networkResponse.status !== 200) {
+              return networkResponse;
+            }
+            
+            try {
+              // Cache the response for future requests
+              let responseCopy = networkResponse.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  cache.put(event.request, responseCopy);
+                })
+                .catch(err => console.error('Cache put error:', err));
+            } catch (error) {
+              console.error('Caching error:', error);
+            }
               
             return networkResponse;
           })
