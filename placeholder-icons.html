@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Placeholder Icons</title>
+  <script>
+    function createIcon(size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      
+      const ctx = canvas.getContext('2d');
+      
+      // Draw background
+      ctx.fillStyle = '#4285f4';
+      ctx.fillRect(0, 0, size, size);
+      
+      // Draw text
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${size/4}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('×', size/2, size/2);
+      
+      // Download the icon
+      const link = document.createElement('a');
+      link.download = `icon-${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+  </script>
+</head>
+<body>
+  <h1>Create Placeholder Icons</h1>
+  <button onclick="createIcon(192)">Create 192px Icon</button>
+  <button onclick="createIcon(512)">Create 512px Icon</button>
+  <p>Click the buttons above to create and download placeholder icons.</p>
+  <p>Once downloaded, place them in the images folder of your project.</p>
+</body>
+</html>
