@@ -419,13 +419,20 @@ const Practice = (function() {
             document.getElementById('customFeedback').className = 'feedback success';
             
             // Show celebration gif
-            document.getElementById('correctGifContainer').classList.remove('hidden');
-            
-            // Add points
+            document.getElementById('correctGifContainer').classList.remove('hidden');            // Add points
             const points = 5;  // Base points for correct answer
-            if (window.Core && typeof Core.addPoints === 'function') {
-                Core.addPoints(points);
+            console.log("Awarding points for correct answer:", points);
+            
+            // Use AppCore to add points correctly
+            if (window.AppCore && typeof window.AppCore.addPoints === 'function') {
+                window.AppCore.addPoints(points);
+                console.log("Added points using window.AppCore.addPoints");
+            } else {
+                console.error("Could not find AppCore.addPoints function to award points");
             }
+            
+            // Update points display directly as a backup
+            updatePointsDisplay(points);
             
             // Show next button
             document.getElementById('nextCustomProblem').classList.remove('hidden');
@@ -653,13 +660,13 @@ const Practice = (function() {
         // Increment matched pairs counter
         matchedPairs++;
         updateMatchesCounter();
-        
-        // Award small bonus points for each match (consistent with main game)
+          // Award small bonus points for each match (consistent with main game)
         const matchPoints = 2;
-        if (window.Core && typeof Core.addPoints === 'function') {
-            Core.addPoints(matchPoints);
-        } else if (window.AppCore && typeof AppCore.addPoints === 'function') {
-            AppCore.addPoints(matchPoints);
+        if (window.AppCore && typeof window.AppCore.addPoints === 'function') {
+            window.AppCore.addPoints(matchPoints);
+            console.log("Added match bonus points using window.AppCore.addPoints:", matchPoints);
+        } else {
+            console.error("Could not find AppCore.addPoints function to award match points");
         }
         
         // Update points display
@@ -713,12 +720,12 @@ const Practice = (function() {
         console.log(`- Base: ${basePointsPerPair * (cards.length / 2)} points`);
         console.log(`- Time bonus: ${timeBonus} points`);
         console.log(`- Moves bonus: ${movesBonus} points`);
-        
-        // Update player's total points
-        if (window.Core && typeof Core.addPoints === 'function') {
-            Core.addPoints(gamePoints);
-        } else if (window.AppCore && typeof AppCore.addPoints === 'function') {
-            AppCore.addPoints(gamePoints);
+          // Update player's total points
+        if (window.AppCore && typeof window.AppCore.addPoints === 'function') {
+            window.AppCore.addPoints(gamePoints);
+            console.log("Added game completion points using window.AppCore.addPoints:", gamePoints);
+        } else {
+            console.error("Could not find AppCore.addPoints function to award game completion points");
         }
         
         // Show completion message
