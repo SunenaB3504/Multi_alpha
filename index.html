@@ -302,13 +302,19 @@
                             <option value="20">20 seconds</option>
                             <option value="30">30 seconds</option>
                         </select>
-                    </div>
-                    <div class="setting-option">
+                    </div>                    <div class="setting-option">
                         <label for="soundEnabled" class="switch">
                             <input type="checkbox" id="soundEnabled" checked aria-label="Toggle Sound Effects">
                             <span class="slider round"></span>
                         </label>
                         <div class="setting-label">Sound Effects</div>
+                    </div>
+                    <div class="setting-section advanced-settings">
+                        <h3><i class="fas fa-tools"></i> Advanced Options</h3>
+                        <div class="setting-option reset-option">
+                            <button id="resetAppData" class="btn-warning" title="Reset App Data"><i class="fas fa-eraser"></i> Reset App Data</button>
+                            <p class="setting-description">Use this if the app is not working correctly. This will clear all cached data but won't delete your progress.</p>
+                        </div>
                     </div>
                     <button id="saveSettings" class="btn-primary" title="Save Settings"><i class="fas fa-save"></i> Save</button>
                 </div>

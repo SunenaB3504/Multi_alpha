@@ -32,8 +32,7 @@ const Settings = (function() {
     
     /**
      * Set up event listeners for settings controls
-     */
-    function setupEventListeners() {
+     */    function setupEventListeners() {
         // High contrast toggle
         const highContrastToggle = document.getElementById('highContrast');
         highContrastToggle.checked = currentSettings.highContrast;
@@ -64,6 +63,16 @@ const Settings = (function() {
             soundToggle.checked = currentSettings.soundEnabled;
             soundToggle.addEventListener('change', () => {
                 currentSettings.soundEnabled = soundToggle.checked;
+            });
+        }
+        
+        // Reset App Data button
+        const resetAppDataBtn = document.getElementById('resetAppData');
+        if (resetAppDataBtn) {
+            resetAppDataBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to reset all app data? This will clear cached files and may fix problems with the app. Your progress will not be lost.')) {
+                    resetAppData();
+                }
             });
         }
         
@@ -136,8 +145,7 @@ const Settings = (function() {
     function getSettings() {
         return { ...currentSettings };
     }
-    
-    /**
+      /**
      * Get sound setting
      * @return {boolean} Whether sound is enabled
      */
@@ -147,6 +155,62 @@ const Settings = (function() {
             return SoundManager.isSoundEnabled();
         }
         return currentSettings.soundEnabled;
+    }
+    
+    /**
+     * Reset app data by clearing caches
+     * This is especially useful for Android WebView browsers
+     */
+    function resetAppData() {
+        try {
+            // Show a loading message
+            UI.showMessage('Clearing app data... Please wait.', 'info');
+            
+            // Clear service worker caches
+            if ('caches' in window) {
+                caches.keys().then(cacheNames => {
+                    return Promise.all(
+                        cacheNames.map(cacheName => {
+                            console.log('Deleting cache:', cacheName);
+                            return caches.delete(cacheName);
+                        })
+                    );
+                });
+            }
+            
+            // Unregister service workers
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    for (let registration of registrations) {
+                        console.log('Unregistering service worker');
+                        registration.unregister();
+                    }
+                });
+            }
+            
+            // Save current progress data before clearing
+            const progressData = localStorage.getItem('multiplicationProgress');
+            const settingsData = localStorage.getItem('multiplicationSettings');
+            
+            // Clear local storage except for progress data
+            localStorage.clear();
+            
+            // Restore important data
+            if (progressData) localStorage.setItem('multiplicationProgress', progressData);
+            if (settingsData) localStorage.setItem('multiplicationSettings', settingsData);
+            
+            // Show success message and reload after short delay
+            UI.showMessage('App data cleared successfully! Reloading app...', 'success');
+            
+            // Reload the page after a short delay to apply changes
+            setTimeout(() => {
+                window.location.reload(true); // Force reload from server, not cache
+            }, 2000);
+            
+        } catch (error) {
+            console.error('Error resetting app data:', error);
+            UI.showMessage('There was a problem clearing app data. Please try again or contact support.', 'error');
+        }
     }
     
     // Public API

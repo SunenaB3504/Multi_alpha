@@ -415,6 +415,47 @@ body {
     gap: 15px;
 }
 
+/* Advanced Settings */
+.advanced-settings {
+    border-top: 1px dashed var(--light-text);
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+.advanced-settings h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.reset-option {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.setting-description {
+    font-size: 0.85rem;
+    color: var(--light-text);
+    margin: 0;
+}
+
+.btn-warning {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-warning:hover {
+    background-color: #d63028;
+    box-shadow: var(--shadow);
+}
+
 .switch {
     position: relative;
     display: inline-block;
